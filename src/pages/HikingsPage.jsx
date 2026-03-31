@@ -85,7 +85,7 @@ const HikingsPage = ({ data }) => {
     }))
   }
 
-  const resetfilters = () => {
+  const resetFilters = () => {
     setFilters({
       province: '',
       difficulty: '',
@@ -160,7 +160,7 @@ const HikingsPage = ({ data }) => {
     )
   })
 
-  if (loading) return <p>cargando rutas...</p>
+  if (loading) return <p>Cargando rutas...</p>
   if (error) return <p>{error}</p>
 
   return (
@@ -171,7 +171,7 @@ const HikingsPage = ({ data }) => {
         filters={filters}
         handleFiltersChange={handleFiltersChange}
         filtersConfig={filtersConfig}
-        resetfilters={resetfilters}
+        resetFilters={resetFilters}
       />
       <section>
         {filteredHikings.length === 0 ? (

@@ -1,6 +1,6 @@
 //aqui tienen que ir condicionales, si es tipo select.. X, si es range, otros campos. Tendría que hacer map por todos los filtros
 
-const HikingFilters = ({ filters, handleFiltersChange, filtersConfig, resetfilters }) => {
+const HikingFilters = ({ filters, handleFiltersChange, filtersConfig, resetFilters }) => {
   return (
     <section className="filtersSec">
       {filtersConfig.map((filter) => {
@@ -45,7 +45,7 @@ const HikingFilters = ({ filters, handleFiltersChange, filtersConfig, resetfilte
         return null
       })}
       <div>
-        <button type="button" onClick={resetfilters}>Limpiar filtros</button>
+        <button type="button" onClick={resetFilters}>Limpiar filtros</button>
       </div>
   </section>
   )
