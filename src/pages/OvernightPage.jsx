@@ -1,1 +1,0 @@
-//paradas para descansar

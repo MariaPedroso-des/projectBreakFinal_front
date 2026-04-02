@@ -39,24 +39,29 @@ const HikingDetailPage = () => {
   return (
     <>
       <Navbar />
+      
       <section>
         <Link to="/hikings">← volver a rutas</Link>
       </section>
+
       <div>
-        <img src={hiking.image} alt={hiking.name} />
+        {/*SOLO RENDERIZA  SI VIENE IMG*/}
+        {hiking.image && <img src={hiking.image} alt={hiking.name} />}
         <h1>{hiking.name}</h1>
       </div>
+
       <div>
         <div>
           <p><strong>Distancia en kilómetros:</strong> {hiking.distanceKm}</p>
           <p><strong>Provincia:</strong> {hiking.province}</p>
         </div>
+
         <p><strong>Dificultad:</strong> {hiking.difficulty}</p>
         <p><strong>Homologación:</strong> {hiking.approvedFEDME}</p>
-        <p><strong>Ubicación del inicio de la ruta:</strong><a href={hiking.mapsLink} target="_blank"> Ver en Google Maps</a></p>
+        <p><strong>Ubicación del inicio de la ruta:</strong><a href={hiking.mapsLink} target="_blank"> Ver</a></p>
         <p><strong>Descripción:</strong> {hiking.description}</p>
-        <p><strong>Descripción del terreno:</strong> {hiking.typeTerrain}</p>
-        <p><strong>Acceso a agua durante la ruta:</strong> {hiking.accessWater}</p>
+        <p><strong>Descripción del terreno:</strong> {hiking.typeTerrain?.join(', ')}</p>
+        <p><strong>Acceso a agua durante la ruta:</strong> {hiking.accessWater?.join(', ')}</p>
       </div>
     </>
   )

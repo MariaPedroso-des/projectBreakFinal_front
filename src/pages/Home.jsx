@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar.jsx'
 const Home = () => {
   return (
     <>
+      <Navbar />
       <section className="heroHome">
         <h1>TRAVIA</h1>
         <h3>rutas y paradas pet-friendly para viajar juntos</h3>

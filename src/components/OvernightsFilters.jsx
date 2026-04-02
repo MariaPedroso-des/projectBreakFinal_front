@@ -1,6 +1,6 @@
 //aqui tienen que ir condicionales, si es tipo select.. X, si es range, otros campos. Tendría que hacer map por todos los filtros
 
-const HikingsFilters = ({ filters, handleFiltersChange, filtersConfig, resetFilters }) => {
+const OvernightsFilters = ({ filters, handleFiltersChange, filtersConfig, resetFilters }) => {
   return (
     <section className="filtersSec">
       {filtersConfig.map((filter) => {
@@ -27,7 +27,7 @@ const HikingsFilters = ({ filters, handleFiltersChange, filtersConfig, resetFilt
           return (
             <div key={filter.name}>
               <label htmlFor={filter.name}>
-                {filter.label}: {filters[filter.name]} km
+                {filter.label}: {filters[filter.name]}
               </label>
               <input 
                 type="range"
@@ -51,4 +51,4 @@ const HikingsFilters = ({ filters, handleFiltersChange, filtersConfig, resetFilt
   )
 }
 
-export default HikingsFilters
+export default OvernightsFilters
