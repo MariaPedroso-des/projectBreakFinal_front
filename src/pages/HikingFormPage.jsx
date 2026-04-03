@@ -110,6 +110,17 @@ const HikingFormPage = () => {
     e.preventDefault()
     setError(null)
 
+    const isValidUrl = (value) => {
+      if (!value) return true
+
+      try {
+        const url = new URL(value)
+        return url.protocol === 'http:' || url.protocol === 'https:'
+      } catch {
+        return false
+      }
+    }
+
     if (!formData.name.trim() ||
         !formData.province ||
         !formData.description.trim() ||
@@ -123,6 +134,11 @@ const HikingFormPage = () => {
       return
     }
 
+    if (!isValidUrl(formData.mapsLink) || !isValidUrl(formData.image)) {
+      setError('La URL no tiene un formato válido')
+      return
+    }
+    
     const payload = {
       name: formData.name,
       province: formData.province,

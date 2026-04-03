@@ -119,6 +119,17 @@ const OvernightFormPage = () => {
     e.preventDefault()
     setError(null)
 
+    const isValidUrl = (value) => {
+      if (!value) return true
+
+      try {
+        const url = new URL(value)
+        return url.protocol === 'http:' || url.protocol === 'https:'
+      } catch {
+        return false
+      }
+    }
+
     if (!formData.name.trim() ||
         !formData.province ||
         !formData.description.trim() ||
@@ -129,6 +140,11 @@ const OvernightFormPage = () => {
     }
     if (formData.name.trim().length < 3) {
       setError('El campo nombre debe tener al menos 3 caracteres')
+      return
+    }
+    
+    if (!isValidUrl(formData.mapsLink) || !isValidUrl(formData.image)) {
+      setError('La URL no tiene un formato válido')
       return
     }
 
@@ -341,10 +357,10 @@ const OvernightFormPage = () => {
           <input
             id="image"
             name="image"
-            type="text"
+            type="url"
             value={formData.image}
             onChange={handleChange}
-            placeholder="Pega aquí la URL de tu imagen"
+            placeholder="https://..."
           />
         </div>
 
@@ -353,10 +369,10 @@ const OvernightFormPage = () => {
           <input
             id="mapsLink"
             name="mapsLink"
-            type="text"
+            type="url"
             value={formData.mapsLink}
             onChange={handleChange}
-            placeholder="Pega aquí la URL de la ubicación"
+            placeholder="https://..."
           />
         </div>
 
