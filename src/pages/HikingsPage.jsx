@@ -205,7 +205,7 @@ const HikingsPage = () => {
   return (
     <>
       <Navbar />
-      <h1>rutas para moverse juntos</h1>
+      <h1>Rutas para moverse juntos</h1>
       <HikingsFilters 
         filters={filters}
         handleFiltersChange={handleFiltersChange}

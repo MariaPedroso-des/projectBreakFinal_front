@@ -12,6 +12,7 @@ const Home = () => {
       <section className='btnHome'>
         <Link to="/hikings">explorar rutas</Link>
         <Link to="/overnights">buscar pernoctas</Link>
+        <Link to="/formchoice">Publicar nueva entrada</Link>
       </section>
     </>
   )
