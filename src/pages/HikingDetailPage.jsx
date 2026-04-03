@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 
 
 const HikingDetailPage = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
   const urlAPI = import.meta.env.VITE_APP_API_URL || 'http://localhost:3000'
   
   const [hiking, setHiking] = useState(null)
@@ -32,6 +33,30 @@ const HikingDetailPage = () => {
     fetchHikingById()
   }, [id, urlAPI])
 
+  const handleDelete = async  () => {
+    const confirmDlt = window.confirm('¿Seguro que quieres eliminar esta ruta?')
+
+    if(!confirmDlt) return
+
+    try {
+      const response = await fetch(`${urlAPI}/api/hikings/${id}`, {
+        method: 'DELETE'
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'No se pudo eliminar la ruta')
+      }
+
+      alert('Ruta eliminada correctamente')
+      navigate('/hikings')
+    } catch(error) {
+      console.log(error)
+      setError(error.message || 'Error al eliminar la ruta')
+    }
+  }
+
   if (loading) return <p>Cargando ruta...</p>
   if (error) return <p>{error}</p>
   if (!hiking) return <p>No se ha encontrado esta ruta. Comprueba que sigue estando disponible</p>
@@ -39,7 +64,7 @@ const HikingDetailPage = () => {
   return (
     <>
       <Navbar />
-      
+
       <section>
         <Link to="/hikings">← volver a rutas</Link>
       </section>
@@ -63,6 +88,13 @@ const HikingDetailPage = () => {
         <p><strong>Descripción del terreno:</strong> {hiking.typeTerrain?.join(', ')}</p>
         <p><strong>Acceso a agua durante la ruta:</strong> {hiking.accessWater?.join(', ')}</p>
       </div>
+
+      <section>
+        <Link to={`/hikings/edit/${hiking.id}`}>
+          <button type="button">Editar</button>
+        </Link>
+        <button type="button" onClick={handleDelete}>Eliminar</button>
+      </section>
     </>
   )
 }

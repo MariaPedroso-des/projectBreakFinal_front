@@ -20,10 +20,12 @@ const App = () => {
 
         <Route path="/hikings" element={<HikingsPage />} />
         <Route path="/hikings/new" element={<HikingFormPage />} />
+        <Route path="/hikings/edit/:id" element={<HikingFormPage />} />
         <Route path="/hikings/:id" element={<HikingDetailPage />} />
-        
+
         <Route path="/overnights" element={<OvernightsPage />} />
         <Route path="/overnights/new" element={<OvernightFormPage />} />
+                <Route path="/overnights/edit/:id" element={<OvernightFormPage />} />
         <Route path="/overnights/:id" element={<OvernightDetailPage />} />
       </Routes>
     </Router>

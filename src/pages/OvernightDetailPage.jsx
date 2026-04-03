@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 
 
 const OvernightDetailPage = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
   const urlAPI = import.meta.env.VITE_APP_API_URL || 'http://localhost:3000'
   
   const [overnight, setOvernight] = useState(null)
@@ -31,6 +32,30 @@ const OvernightDetailPage = () => {
     }
     fetchOvernightById()
   }, [id, urlAPI])
+
+  const handleDelete = async  () => {
+    const confirmDlt = window.confirm('¿Seguro que quieres eliminar esta zona de pernocta?')
+
+    if(!confirmDlt) return
+
+    try {
+      const response = await fetch(`${urlAPI}/api/overnights/${id}`, {
+        method: 'DELETE'
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'No se pudo eliminar la zona de pernocta')
+      }
+
+      alert('Zona de pernocta eliminada correctamente')
+      navigate('/overnights')
+    } catch(error) {
+      console.log(error)
+      setError(error.message || 'Error al eliminar la zona de pernocta')
+    }
+  }
 
   if (loading) return <p>Cargando zona de pernocta...</p>
   if (error) return <p>{error}</p>
@@ -63,6 +88,13 @@ const OvernightDetailPage = () => {
         <p><strong>Estancia: </strong> {overnight.stay}</p>
         <p><strong>Limitaciones: </strong> {overnight.limitations?.join(', ')}</p>
       </div>
+
+      <section>
+        <Link to={`/overnights/edit/${overnight.id}`}>
+          <button type="button">Editar</button>
+        </Link>
+        <button type="button" onClick={handleDelete}>Eliminar</button>
+      </section>
     </>
   )
 }
