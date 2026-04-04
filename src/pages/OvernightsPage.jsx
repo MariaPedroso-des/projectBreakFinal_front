@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import OvernightsFilters from '../components/OvernightsFilters.jsx'
+import { getOvernightOptions } from '../services/overnightOptionsService.js'
+import { getAllOvernights } from '../services/hikingsService.js'
+
 
 const OvernightsPage = () => {
   const urlAPI = import.meta.env.VITE_APP_API_URL
@@ -33,57 +36,18 @@ const OvernightsPage = () => {
   const capacity = Math.max(...overnights.map((e) => e.capacity || 1))
   
   useEffect(() => {
-    const fetchFiltersOvernightsOptions = async () => {
+    const fetchPageDate = async () => {
       try {
-        const [
-          overnightsResponse,
-          provinceResponse,
-          servicesResponse,
-          proximityResponse,
-          signalResponse,
-          stayResponse,
-          limitationsResponse
-        ] = await Promise.all([
-          fetch(`${urlAPI}/api/overnights`),
-          fetch(`${urlAPI}/api/utils/province`),
-          fetch(`${urlAPI}/api/utils/services`),
-          fetch(`${urlAPI}/api/utils/proximity`),
-          fetch(`${urlAPI}/api/utils/signal`),
-          fetch(`${urlAPI}/api/utils/stay`),
-          fetch(`${urlAPI}/api/utils/limitations`)
+        setLoading(true)
+        setError(null)
+
+        const [overnightsArray, optionsData] = await Promise.all([
+          getAllOvernights(urlAPI),
+          getOvernightOptions(urlAPI)
         ])
-        if (
-          !overnightsResponse.ok ||
-          !provinceResponse.ok ||
-          !servicesResponse.ok ||
-          !proximityResponse.ok ||
-          !signalResponse.ok ||
-          !stayResponse.ok ||
-          !limitationsResponse.ok
-        ) {
-          setError('Error al cargar datos')
-          return
-        }
-
-        const overnightsData = await overnightsResponse.json()
-        const provinceData = await provinceResponse.json()
-        const servicesData = await servicesResponse.json()
-        const proximityData = await proximityResponse.json()
-        const signalData = await signalResponse.json()
-        const stayData = await stayResponse.json()
-        const limitationsData = await limitationsResponse.json()
-
-        const overnightsArray = overnightsData.overnights || []
         setOvernights(overnightsArray)
 
-        setFiltersOptions({
-          province: provinceData,
-          services: servicesData,
-          proximity: proximityData,
-          signal: signalData,
-          stay: stayData,
-          limitations: limitationsData
-        })
+        setFiltersOptions(optionsData)
 
         const maxCapacity = overnightsArray.length > 0 ? Math.max(...overnightsArray.map((overnight) => overnight.capacity || 1)) : 1
       
@@ -100,12 +64,12 @@ const OvernightsPage = () => {
       
       } catch (error) {
         console.log(error)
-        setError('Error al cargar los datos')
+        setError(error.message || 'Error al cargar los datos')
       } finally {
         setLoading(false)
       }
     }
-    fetchFiltersOvernightsOptions()
+    fetchPageDate()
   }, [urlAPI])
 
   const handleFiltersChange = (e) => {

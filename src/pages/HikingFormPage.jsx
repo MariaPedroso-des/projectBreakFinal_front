@@ -80,7 +80,7 @@ const HikingFormPage = () => {
 
       } catch (error) {
         console.log(error)
-        setError('Error al cargar los las pociones del formulario')
+        setError('Error al cargar los las opciones del formulario')
       } finally {
         setLoadingOptions(false)
       }
@@ -107,12 +107,12 @@ const HikingFormPage = () => {
         setFormData({
           name: data.name || '',
           province: data.province || '',
-          difficulty: data.difficulty || 'sin definir',
+          difficulty: data.difficulty || '',
           distanceKm: data.distanceKm || '',
           typeTerrain: data.typeTerrain || [],
           description: data.description || '',
           image: data.image || '',
-          approvedFEDME: data.approvedFEDME || 'sin homologación',
+          approvedFEDME: data.approvedFEDME || '',
           mapsLink: data.mapsLink || '',
           accessWater: data.accessWater || []
         })
@@ -183,12 +183,12 @@ const HikingFormPage = () => {
     const payload = {
       name: formData.name,
       province: formData.province,
-      difficulty: formData.difficulty || 'sin definir',
+      difficulty: formData.difficulty || '',
       distanceKm: Number(formData.distanceKm),
       typeTerrain: formData.typeTerrain.length > 0 ? formData.typeTerrain : ['sin definir'],
       description: formData.description,
       image: formData.image,
-      approvedFEDME: formData.approvedFEDME || 'sin homologación',
+      approvedFEDME: formData.approvedFEDME || '',
       mapsLink: formData.mapsLink,
       accessWater: formData.accessWater.length > 0 ? formData.accessWater : ['sin definir']
     }
@@ -236,7 +236,7 @@ const HikingFormPage = () => {
       </section>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="name">Nombre </label>
+          <label htmlFor="name">Nombre</label>
           <input 
             id="name"
             name="name"
@@ -249,7 +249,7 @@ const HikingFormPage = () => {
         </div>
 
         <div>
-          <label htmlFor="description">Descripción </label>
+          <label htmlFor="description">Descripción</label>
           <textarea 
             id="description"
             name="description"
@@ -261,7 +261,7 @@ const HikingFormPage = () => {
         </div>
         
         <div>
-          <label htmlFor="province">Provincia </label>
+          <label htmlFor="province">Provincia</label>
           <select
             id="province"
             name="province"
@@ -281,7 +281,7 @@ const HikingFormPage = () => {
         </div>
 
         <div>
-          <label htmlFor="difficulty">Dificultad </label>
+          <label htmlFor="difficulty">Dificultad</label>
           <select
             id="difficulty"
             name="difficulty"
@@ -301,7 +301,7 @@ const HikingFormPage = () => {
         </div>
 
         <div>
-          <label htmlFor="distanceKm">Distancia en kilómetros </label>
+          <label htmlFor="distanceKm">Distancia en kilómetros</label>
           <input 
             id="distanceKm"
             name="distanceKm"
@@ -335,7 +335,7 @@ const HikingFormPage = () => {
         </fieldset>
         
         <div>
-          <label htmlFor="approvedFEDME">Homologación FEDME </label>
+          <label htmlFor="approvedFEDME">Homologación FEDME</label>
           <select
             id="approvedFEDME"
             name="approvedFEDME"
@@ -354,7 +354,7 @@ const HikingFormPage = () => {
         </div>
 
         <div>
-          <label htmlFor="image">URL de la imagen </label>
+          <label htmlFor="image">URL de la imagen</label>
           <input
             id="image"
             name="image"
@@ -366,7 +366,7 @@ const HikingFormPage = () => {
         </div>
 
         <div>
-          <label htmlFor="mapsLink">URL de la ubicación </label>
+          <label htmlFor="mapsLink">URL de la ubicación</label>
           <input
             id="mapsLink"
             name="mapsLink"

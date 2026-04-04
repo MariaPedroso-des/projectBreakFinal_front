@@ -1,0 +1,22 @@
+.nav {
+  width: 100%;
+  border-bottom: 1px solid greenyellow;
+  background-color: ;
+
+}
+
+.navInner {
+
+}
+
+.navBrand {
+  font-family: var(--font-brand)
+}
+
+.navLinks {
+
+}
+
+.navLink {
+
+}

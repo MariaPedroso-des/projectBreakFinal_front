@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import HikingsFilters from '../components/HikingsFilters.jsx'
+import { getAllHikings } from '../services/hikingsService.js'
+import { getHikingOptions } from '../services/hikingOptionsService.js'
 
 const HikingsPage = () => {
   const urlAPI = import.meta.env.VITE_APP_API_URL
@@ -31,52 +33,19 @@ const HikingsPage = () => {
   const distanceKm = hikings.length > 0 ? Math.max(...hikings.map((e) => e.distanceKm || 1)) : 1
   
   useEffect(() => {
-    const fetchFiltersHikingsOptions = async () => {
+    const fetchPageData = async () => {
       try {
-        const [
-          hikingsResponse,
-          provinceResponse,
-          difficultyResponse,
-          terrainResponse,
-          approvedResponse,
-          waterResponse,
-        ] = await Promise.all([
-          fetch(`${urlAPI}/api/hikings`),
-          fetch(`${urlAPI}/api/utils/province`),
-          fetch(`${urlAPI}/api/utils/difficulty`),
-          fetch(`${urlAPI}/api/utils/terrain`),
-          fetch(`${urlAPI}/api/utils/approved`),
-          fetch(`${urlAPI}/api/utils/water`),
+        setLoading(true)
+        setError(null)
+
+        const [hikingsArray, optionsData] = await Promise.all([
+          getAllHikings(urlAPI),
+          getHikingOptions(urlAPI),
         ])
-        if (
-          !hikingsResponse.ok ||
-          !provinceResponse.ok ||
-          !difficultyResponse.ok ||
-          !terrainResponse.ok ||
-          !approvedResponse.ok ||
-          !waterResponse.ok
-        ) {
-          setError('Error al cargar datos')
-          return
-        }
 
-        const hikingsData = await hikingsResponse.json()
-        const provinceData = await provinceResponse.json()
-        const difficultyData = await difficultyResponse.json()
-        const terrainData = await terrainResponse.json()
-        const approvedData = await approvedResponse.json()
-        const waterData = await waterResponse.json()
-
-        const hikingsArray = hikingsData.hikings || []
         setHikings(hikingsArray)
 
-        setFiltersOptions({
-          province: provinceData,
-          difficulty: difficultyData,
-          typeTerrain:terrainData,
-          approvedFEDME: approvedData,
-          accessWater: waterData
-        })
+        setFiltersOptions(optionsData)
 
         const maxDistance = hikingsArray.length > 0 ? Math.max(...hikingsArray.map((e) => e.distanceKm || 1)) : 1
         
@@ -91,12 +60,12 @@ const HikingsPage = () => {
       
       } catch (error) {
         console.log(error)
-        setError('Error al cargar los datos')
+        setError(error.message || 'Error al cargar los datos')
       } finally {
         setLoading(false)
       }
     }
-    fetchFiltersHikingsOptions()
+    fetchPageData()
   }, [urlAPI])
 
   const handleFiltersChange = (e) => {
