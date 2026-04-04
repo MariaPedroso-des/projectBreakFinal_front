@@ -6,7 +6,7 @@ import Navbar from '../components/Navbar.jsx'
 const HikingDetailPage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
-  const urlAPI = import.meta.env.VITE_APP_API_URL || 'http://localhost:3000'
+  const urlAPI = import.meta.env.VITE_APP_API_URL
   
   const [hiking, setHiking] = useState(null)
   const [loading, setLoading] =useState(true)

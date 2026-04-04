@@ -21,7 +21,7 @@ const OvernightFormPage = () => {
   const { id } = useParams()
   const  editMode = Boolean(id)
 
-  const urlAPI = import.meta.env.VITE_APP_API_URL || 'http://localhost:3000'
+  const urlAPI = import.meta.env.VITE_APP_API_URL
 
   const [formData, setFormData] = useState(initialFormData)
 

@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar.jsx'
 import HikingsFilters from '../components/HikingsFilters.jsx'
 
 const HikingsPage = () => {
-  const urlAPI = import.meta.env.VITE_APP_API_URL || 'http://localhost:3000'
+  const urlAPI = import.meta.env.VITE_APP_API_URL
 
   const[hikings, setHikings] = useState([])
 
