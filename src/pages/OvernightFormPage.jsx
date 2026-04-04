@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 
   const initialFormData = {
@@ -18,6 +18,9 @@ import Navbar from '../components/Navbar.jsx'
 
 const OvernightFormPage = () => {
   const navigate = useNavigate()
+  const { id } = useParams()
+  const  editMode = Boolean(id)
+
   const urlAPI = import.meta.env.VITE_APP_API_URL || 'http://localhost:3000'
 
   const [formData, setFormData] = useState(initialFormData)
@@ -32,7 +35,8 @@ const OvernightFormPage = () => {
   })
 
   const [loading, setLoading] = useState(false)
-  const[loadingOptions, setLoadingOptions] = useState(true)
+  const [loadingOptions, setLoadingOptions] = useState(true)
+  const [loadingOvernight, setLoadingOvernight] = useState(editMode)
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -92,6 +96,44 @@ const OvernightFormPage = () => {
     fetchOptions()
   }, [urlAPI])
 
+  useEffect(() => {
+    if(!editMode) {
+      setLoadingOvernight(false)
+      return
+    }
+
+    const fetchOvernightById = async ()=> {
+      try {
+        const response = await fetch(`${urlAPI}/api/overnights/${id}`)
+
+        if (!response.ok) {
+          throw new Error('No se puede cargar la zona de pernocta para editar')
+        }
+
+        const data = await response.json()
+
+        setFormData({
+          name: data.name || '',
+          province: data.province || '',
+          description: data.description || '',
+          capacity: data.capacity || '',
+          image: data.image || '',
+          mapsLink: data.mapsLink || '',
+          services: data.services || [],
+          proximity: data.proximity || [],
+          signal: data.signal || 'sin definir',
+          stay: data.stay || 'sin definir',
+          limitations: data.limitations || []
+        })
+      } catch (error) {
+        console.log(error)
+        setError('Error al cargar la zona de pernocta para editar')
+      } finally {
+        setLoadingOvernight(false)
+      }
+    }
+    fetchOvernightById()
+  }, [id, editMode, urlAPI])
 
   const handleChange = (e) => {
 
@@ -114,21 +156,21 @@ const OvernightFormPage = () => {
       [name]: checked ? [...preFormData[name], value] : preFormData[name].filter((e) => e !== value)
     }))
   }
+  
+  const isValidUrl = (value) => {
+    if (!value) return true
+    
+    try {
+      const url = new URL(value)
+      return url.protocol === 'http:' || url.protocol === 'https:'
+    } catch {
+      return false
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
-
-    const isValidUrl = (value) => {
-      if (!value) return true
-
-      try {
-        const url = new URL(value)
-        return url.protocol === 'http:' || url.protocol === 'https:'
-      } catch {
-        return false
-      }
-    }
 
     if (!formData.name.trim() ||
         !formData.province ||
@@ -165,8 +207,14 @@ const OvernightFormPage = () => {
     try {
       setLoading(true)
 
-      const  response =  await fetch(`${urlAPI}/api/overnights`, {
-        method: 'POST',
+      const endpoint = editMode
+      ? `${urlAPI}/api/overnights/edit/${id}`
+      : `${urlAPI}/api/overnights`
+
+      const method = editMode ? 'PUT' : 'POST'
+
+      const  response =  await fetch(endpoint, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -176,26 +224,26 @@ const OvernightFormPage = () => {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || 'Error al crear la zona de pernocta')
+        throw new Error(data.message || `Error al ${editMode ? 'editar' : 'crear'} la zona de pernocta`)
       }
 
-      alert('Zona de descanso creada!')
+      alert(editMode ? 'Zona de pernocta editada con éxito' : 'Zona de pernocta creada con éxito')
       navigate('/overnights')
 
     } catch (error) {
       console.log(error)
-      setError(error.message || 'Error al crear la zona de pernocta')
+      setError(error.message ||  `Error al ${editMode ? 'editar' : 'crear'} la zona de pernocta`)
     } finally {
       setLoading(false)
     }
   }
-  if (loadingOptions) return <p>Cargango página...</p>
+  if (loadingOptions || loadingOvernight) return <p>Cargango página...</p>
 
   return (
     <>
       <Navbar />
       <section>
-        <h1>Publicar nueva pernocta</h1>
+        <h1>{editMode ? 'Editar zona de pernocta' : 'Publicar nueva pernocta'}</h1>
       </section>
       <form onSubmit={handleSubmit}>
         <div>
@@ -204,7 +252,7 @@ const OvernightFormPage = () => {
             id="name"
             name="name"
             type="text"
-            placeholder='Nombre de la zona'
+            placeholder="Nombre de la zona"
             value={formData.name}
             onChange={handleChange}
             required
@@ -216,7 +264,7 @@ const OvernightFormPage = () => {
           <textarea 
             id="description"
             name="description"
-            placeholder='Descripción de la zona'
+            placeholder="Descripción de la zona"
             value={formData.description}
             onChange={handleChange}
             required

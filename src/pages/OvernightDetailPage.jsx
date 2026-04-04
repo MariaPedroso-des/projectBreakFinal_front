@@ -90,7 +90,7 @@ const OvernightDetailPage = () => {
       </div>
 
       <section>
-        <Link to={`/overnights/edit/${overnight.id}`}>
+        <Link to={`/overnights/edit/${overnight._id}`}>
           <button type="button">Editar</button>
         </Link>
         <button type="button" onClick={handleDelete}>Eliminar</button>

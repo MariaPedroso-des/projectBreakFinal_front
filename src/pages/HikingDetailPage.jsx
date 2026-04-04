@@ -90,7 +90,7 @@ const HikingDetailPage = () => {
       </div>
 
       <section>
-        <Link to={`/hikings/edit/${hiking.id}`}>
+        <Link to={`/hikings/edit/${hiking._id}`}>
           <button type="button">Editar</button>
         </Link>
         <button type="button" onClick={handleDelete}>Eliminar</button>

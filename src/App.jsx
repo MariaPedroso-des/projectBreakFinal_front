@@ -25,7 +25,7 @@ const App = () => {
 
         <Route path="/overnights" element={<OvernightsPage />} />
         <Route path="/overnights/new" element={<OvernightFormPage />} />
-                <Route path="/overnights/edit/:id" element={<OvernightFormPage />} />
+        <Route path="/overnights/edit/:id" element={<OvernightFormPage />} />
         <Route path="/overnights/:id" element={<OvernightDetailPage />} />
       </Routes>
     </Router>
