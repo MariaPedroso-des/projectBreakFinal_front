@@ -195,194 +195,198 @@ const OvernightFormPage = () => {
   return (
     <>
       <Navbar />
-      <section>
-        <h1>{editMode ? 'Editar zona de pernocta' : 'Publicar nueva pernocta'}</h1>
-      </section>
-      <form onSubmit={handleSubmit}>
-        <div className="formGroup">
-          <label htmlFor="name">Nombre </label>
-          <input 
-            id="name"
-            name="name"
-            type="text"
-            placeholder="Nombre de la zona"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
 
-        <div className="formGroup">
-          <label htmlFor="description">Descripción</label>
-          <textarea 
-            id="description"
-            name="description"
-            placeholder="Descripción de la zona"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        
-        <div className="formGroup">
-          <label htmlFor="province">Provincia</label>
-          <select
-            id="province"
-            name="province"
-            value={formData.province}
-            onChange={handleChange}
-            required 
-          >
-            <option value="">Selecciona la provincia</option>
-              {options.province.map((province) => {
+      <main className="pageContainer">
+        <section className="section">
+          <h1>{editMode ? 'Editar zona de pernocta' : 'Publicar nueva pernocta'}</h1>
+        </section>
+        <form onSubmit={handleSubmit}>
+          <div className="formGroup">
+            <label htmlFor="name">Nombre </label>
+            <input 
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Nombre de la zona"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="formGroup">
+            <label htmlFor="description">Descripción</label>
+            <textarea 
+              id="description"
+              name="description"
+              placeholder="Descripción de la zona"
+              value={formData.description}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          
+          <div className="formGroup">
+            <label htmlFor="province">Provincia</label>
+            <select
+              id="province"
+              name="province"
+              value={formData.province}
+              onChange={handleChange}
+              required 
+            >
+              <option value="">Selecciona la provincia</option>
+                {options.province.map((province) => {
+                  return (
+                  <option key={province} value={province}>
+                    {province}
+                    </option>
+                    )
+                })}
+            </select>
+          </div>
+
+          <div className="formGroup">
+            <label htmlFor="capacity">Número aproximado de parcamientos</label>
+            <input 
+              id="capacity"
+              name="capacity"
+              placeholder="3"
+              type="number"
+              value={formData.capacity}
+              onChange={handleChange}
+              required
+              min="1"
+              max="50"
+            />
+          </div>
+
+          <fieldset className="formGroup">
+            <legend>Servicios</legend>
+              {options.services.map((service) => {
                 return (
-                <option key={province} value={province}>
-                  {province}
-                  </option>
-                  )
+                  <label key={service}>
+                    <input
+                      type="checkbox"
+                      name="services"
+                      value={service}
+                      checked={formData.services.includes(service)}
+                      onChange={handleArrayChange}
+                    />
+                    {service}
+                  </label>
+                )
               })}
-          </select>
-        </div>
+          </fieldset>
 
-        <div className="formGroup">
-          <label htmlFor="capacity">Número aproximado de parcamientos</label>
-          <input 
-            id="capacity"
-            name="capacity"
-            placeholder="3"
-            type="number"
-            value={formData.capacity}
-            onChange={handleChange}
-            required
-            min="1"
-            max="50"
-          />
-        </div>
-
-        <fieldset className="formGroup">
-          <legend>Servicios </legend>
-            {options.services.map((service) => {
-              return (
-                <label key={service}>
-                  <input
-                    type="checkbox"
-                    name="services"
-                    value={service}
-                    checked={formData.services.includes(service)}
-                    onChange={handleArrayChange}
-                  />
-                  {service}
-                </label>
-              )
-            })}
-        </fieldset>
-
-        <fieldset className="formGroup">
-          <legend>Proximidad</legend>
-            {options.proximity.map((proximity) => {
-              return (
-                <label key={proximity}>
-                  <input
-                    type="checkbox"
-                    name="proximity"
-                    value={proximity}
-                    checked={formData.proximity.includes(proximity)}
-                    onChange={handleArrayChange}
-                  />
-                  {proximity}
-                </label>
-              )
-            })}
-        </fieldset>
-
-        <div className="formGroup">
-          <label htmlFor="signal">Señal telefónica</label>
-          <select
-            id="signal"
-            name="signal"
-            value={formData.signal}
-            onChange={handleChange}
-            required 
-          >
-            <option value="">Selecciona la señal telefónica disponible </option>
-              {options.signal.map((signal) => {
+          <fieldset className="formGroup">
+            <legend>Proximidad</legend>
+              {options.proximity.map((proximity) => {
                 return (
-                <option key={signal} value={signal}>
-                  {signal}
-                  </option>
-                  )
+                  <label key={proximity}>
+                    <input
+                      type="checkbox"
+                      name="proximity"
+                      value={proximity}
+                      checked={formData.proximity.includes(proximity)}
+                      onChange={handleArrayChange}
+                    />
+                    {proximity}
+                  </label>
+                )
               })}
-          </select>
-        </div>
+          </fieldset>
 
-        <div className="formGroup">
-          <label htmlFor="stay">Limitación de estancia</label>
-          <select
-            id="stay"
-            name="stay"
-            value={formData.stay}
-            onChange={handleChange}
-            required 
-          >
-            <option value="">Selecciona la limitación de tiempo</option>
-              {options.stay.map((stay) => {
+          <div className="formGroup">
+            <label htmlFor="signal">Señal telefónica</label>
+            <select
+              id="signal"
+              name="signal"
+              value={formData.signal}
+              onChange={handleChange}
+              required 
+            >
+              <option value="">Selecciona la señal telefónica disponible </option>
+                {options.signal.map((signal) => {
+                  return (
+                  <option key={signal} value={signal}>
+                    {signal}
+                    </option>
+                    )
+                })}
+            </select>
+          </div>
+
+          <div className="formGroup">
+            <label htmlFor="stay">Limitación de estancia</label>
+            <select
+              id="stay"
+              name="stay"
+              value={formData.stay}
+              onChange={handleChange}
+              required 
+            >
+              <option value="">Selecciona la limitación de tiempo</option>
+                {options.stay.map((stay) => {
+                  return (
+                  <option key={stay} value={stay}>
+                    {stay}
+                    </option>
+                    )
+                })}
+            </select>
+          </div>
+
+          <fieldset className="formGroup">
+            <legend>Limitaciones generales</legend>
+              {options.limitations.map((limitation) => {
                 return (
-                <option key={stay} value={stay}>
-                  {stay}
-                  </option>
-                  )
+                  <label key={limitation}>
+                    <input
+                      type="checkbox"
+                      name="limitations"
+                      value={limitation}
+                      checked={formData.limitations.includes(limitation)}
+                      onChange={handleArrayChange}
+                    />
+                    {limitation}
+                  </label>
+                )
               })}
-          </select>
-        </div>
+          </fieldset>
 
-        <fieldset className="formGroup">
-          <legend>Limitaciones generales</legend>
-            {options.limitations.map((limitation) => {
-              return (
-                <label key={limitation}>
-                  <input
-                    type="checkbox"
-                    name="limitations"
-                    value={limitation}
-                    checked={formData.limitations.includes(limitation)}
-                    onChange={handleArrayChange}
-                  />
-                  {limitation}
-                </label>
-              )
-            })}
-        </fieldset>
+          <div className="formGroup">
+            <label htmlFor="image">URL de la imagen</label>
+            <input
+              id="image"
+              name="image"
+              type="url"
+              value={formData.image}
+              onChange={handleChange}
+              placeholder="https://..."
+            />
+          </div>
 
-        <div className="formGroup">
-          <label htmlFor="image">URL de la imagen</label>
-          <input
-            id="image"
-            name="image"
-            type="url"
-            value={formData.image}
-            onChange={handleChange}
-            placeholder="https://..."
-          />
-        </div>
+          <div className="formGroup">
+            <label htmlFor="mapsLink">URL de la ubicación</label>
+            <input
+              id="mapsLink"
+              name="mapsLink"
+              type="url"
+              value={formData.mapsLink}
+              onChange={handleChange}
+              placeholder="https://..."
+            />
+          </div>
 
-        <div className="formGroup">
-          <label htmlFor="mapsLink">URL de la ubicación</label>
-          <input
-            id="mapsLink"
-            name="mapsLink"
-            type="url"
-            value={formData.mapsLink}
-            onChange={handleChange}
-            placeholder="https://..."
-          />
-        </div>
+          {error && <p className="errorMessage">{error}</p>}
+          
+          <button className='btnPublish' type='submit' disabled={submit}>
+            {submit ? 'Publicando...' : 'Publicar zona de pernocta'}
+          </button>
+        </form>
 
-        {error && <p className="errorMessage">{error}</p>}
-        
-        <button className='btnPublish' type='submit' disabled={submit}>
-          {submit ? 'Publicando...' : 'Publicar zona de pernocta'}
-        </button>
-      </form>
+      </main>
     </>
   )
 }

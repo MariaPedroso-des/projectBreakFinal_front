@@ -19,7 +19,7 @@ const FormChoicePage = () => {
           </h3>
         </section>
       <section className={styles.choiceGrid}>
-          <Link to="/overnights/new" className={`${styles.choiceCard} ${styles.choiceRoutes}`}>
+          <Link to="/hikings/new" className={`${styles.choiceCard} ${styles.choiceRoutes}`}>
             <span className={styles.choiceEyebrow}>Subir ruta</span>
             <h2 className={styles.choiceTitle}>Rutas</h2>
             <p className={styles.choiceText}>

@@ -1,22 +1,69 @@
 .nav {
   width: 100%;
-  border-bottom: 1px solid greenyellow;
-  background-color: ;
-
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface);
 }
 
 .navInner {
+  display: flex;
+  margin-inline: auto;
+  width: min(100%, var(--container-width));
+  padding: 1rem;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
 
 }
 
 .navBrand {
-  font-family: var(--font-brand)
+  font-family: var(--font-brand);
+  font-size: 1.25rem;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .navLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
 
 }
 
 .navLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  font-weight: 500;
+  transition: transform 0.2s ease;
+}
 
+.navLink:hover {
+  transform: translateY(-2.5px)
+}
+
+.navRoutes {
+  background-color: #749633;
+}
+
+.navOvernights {
+  background-color: #a65634;
+}
+
+.navPublish {
+  background-color: #617ea4;
+}
+
+@media (max-width: 768px) {
+  .navInner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navLinks {
+    width: 100%;
+  }
 }

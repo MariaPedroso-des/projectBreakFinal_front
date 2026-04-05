@@ -4,17 +4,18 @@ import styles from './Navbar.module.css'
 
 function Navbar() {
   return (
-    <nav className={styles.nav}>
+    <header className={styles.nav}>
       <div className={styles.navInner}>
         <Link to="/" className={styles.navBrand}>TRAVIA</Link>
 
-        <div className={styles.navLinks}>
-          <Link to="/hikings" className={styles.navLink}>Rutas</Link>
-          <Link to="/overnights" className={styles.navLink}>Pernoctas</Link>
-          <Link to="/formchoice" className={styles.navLink}>Publicar</Link>
-        </div>
+        <nav className={styles.navLinks}>
+          <Link to="/hikings" className={`${styles.navLink} ${styles.navRoutes}`}>Rutas</Link>
+          <Link to="/overnights" className={`${styles.navLink} ${styles.navOvernights}`}>Pernoctas</Link>
+          <Link 
+            to="/formchoice" className={`${styles.navLink} ${styles.navPublish}`}>Publicar</Link>
+        </nav>
       </div>
-    </nav>
+    </header>
   )
 }
 

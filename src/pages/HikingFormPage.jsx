@@ -193,178 +193,180 @@ const HikingFormPage = () => {
   return (
     <>
       <Navbar />
-      <section>
-        <h1>{editMode ? 'Editar ruta' : 'Publicar nueva ruta'}</h1>
-      </section>
-      <form onSubmit={handleSubmit}>
-        <div className="formGroup">
-          <label htmlFor="name">Nombre</label>
-          <input 
-            id="name"
-            name="name"
-            type="text"
-            placeholder="Nombre de la ruta"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
+      <main className="pageContainer">
+        <section className="section">
+          <h1>{editMode ? 'Editar ruta' : 'Publicar nueva ruta'}</h1>
+        </section>
+        <form onSubmit={handleSubmit}>
+          <div className="formGroup">
+            <label htmlFor="name">Nombre</label>
+            <input 
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Nombre de la ruta"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <div className="formGroup">
-          <label htmlFor="description">Descripción</label>
-          <textarea 
-            id="description"
-            name="description"
-            placeholder="Descripción de la ruta"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        
-        <div className="formGroup">
-          <label htmlFor="province">Provincia</label>
-          <select
-            id="province"
-            name="province"
-            value={formData.province}
-            onChange={handleChange}
-            required 
-          >
-            <option value="">Selecciona la provincia</option>
-              {options.province.map((province) => {
+          <div className="formGroup">
+            <label htmlFor="description">Descripción</label>
+            <textarea 
+              id="description"
+              name="description"
+              placeholder="Descripción de la ruta"
+              value={formData.description}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          
+          <div className="formGroup">
+            <label htmlFor="province">Provincia</label>
+            <select
+              id="province"
+              name="province"
+              value={formData.province}
+              onChange={handleChange}
+              required 
+            >
+              <option value="">Selecciona la provincia</option>
+                {options.province.map((province) => {
+                  return (
+                  <option key={province} value={province}>
+                    {province}
+                    </option>
+                    )
+                })}
+            </select>
+          </div>
+
+          <div className="formGroup">
+            <label htmlFor="difficulty">Dificultad</label>
+            <select
+              id="difficulty"
+              name="difficulty"
+              value={formData.difficulty}
+              onChange={handleChange}
+              required 
+            >
+              <option value="">Selecciona la dificultad de la ruta</option>
+                {options.difficulty.map((difficulty) => {
+                  return (
+                  <option key={difficulty} value={difficulty}>
+                    {difficulty}
+                    </option>
+                    )
+                })}
+            </select>
+          </div>
+
+          <div className="formGroup">
+            <label htmlFor="distanceKm">Distancia en kilómetros</label>
+            <input 
+              id="distanceKm"
+              name="distanceKm"
+              placeholder="9.5"
+              type="number"
+              value={formData.distanceKm}
+              onChange={handleChange}
+              required
+              min="1"
+              max="50"
+              step="0.1"
+            />
+          </div>
+
+          <fieldset className="formGroup">
+            <legend>Tipos de terreno</legend>
+              {options.typeTerrain.map((terrain) => {
                 return (
-                <option key={province} value={province}>
-                  {province}
-                  </option>
-                  )
+                  <label key={terrain}>
+                    <input
+                      type="checkbox"
+                      name="typeTerrain"
+                      value={terrain}
+                      checked={formData.typeTerrain.includes(terrain)}
+                      onChange={handleArrayChange}
+                    />
+                    {terrain}
+                  </label>
+                )
               })}
-          </select>
-        </div>
+          </fieldset>
+          
+          <div className="formGroup">
+            <label htmlFor="approvedFEDME">Homologación FEDME</label>
+            <select
+              id="approvedFEDME"
+              name="approvedFEDME"
+              value={formData.approvedFEDME}
+              onChange={handleChange}
+            >
+              <option value="">Selecciona el tipo de homologación</option>
+                {options.approvedFEDME.map((approved) => {
+                  return (
+                  <option key={approved} value={approved}>
+                    {approved}
+                    </option>
+                    )
+                })}
+            </select>
+          </div>
 
-        <div className="formGroup">
-          <label htmlFor="difficulty">Dificultad</label>
-          <select
-            id="difficulty"
-            name="difficulty"
-            value={formData.difficulty}
-            onChange={handleChange}
-            required 
-          >
-            <option value="">Selecciona la dificultad de la ruta</option>
-              {options.difficulty.map((difficulty) => {
+          <div className="formGroup">
+            <label htmlFor="image">URL de la imagen</label>
+            <input
+              id="image"
+              name="image"
+              type="url"
+              value={formData.image}
+              onChange={handleChange}
+              placeholder="https://..."
+            />
+          </div>
+
+          <div className="formGroup">
+            <label htmlFor="mapsLink">URL de la ubicación</label>
+            <input
+              id="mapsLink"
+              name="mapsLink"
+              type="url"
+              value={formData.mapsLink}
+              onChange={handleChange}
+              placeholder="https://..."
+            />
+          </div>
+
+          <fieldset className="formGroup">
+            <legend>Accesos al agua</legend>
+              {options.accessWater.map((water) => {
                 return (
-                <option key={difficulty} value={difficulty}>
-                  {difficulty}
-                  </option>
-                  )
+                  <label key={water}>
+                    <input
+                      type="checkbox"
+                      name="accessWater"
+                      value={water}
+                      checked={formData.accessWater.includes(water)}
+                      onChange={handleArrayChange}
+                    />
+                    {water}
+                  </label>
+                )
               })}
-          </select>
-        </div>
+          </fieldset>
 
-        <div className="formGroup">
-          <label htmlFor="distanceKm">Distancia en kilómetros</label>
-          <input 
-            id="distanceKm"
-            name="distanceKm"
-            placeholder="9.5"
-            type="number"
-            value={formData.distanceKm}
-            onChange={handleChange}
-            required
-            min="1"
-            max="50"
-            step="0.1"
-          />
-        </div>
-
-        <fieldset className="formGroup">
-          <legend>Tipos de terreno</legend>
-            {options.typeTerrain.map((terrain) => {
-              return (
-                <label key={terrain}>
-                  <input
-                    type="checkbox"
-                    name="typeTerrain"
-                    value={terrain}
-                    checked={formData.typeTerrain.includes(terrain)}
-                    onChange={handleArrayChange}
-                  />
-                  {terrain}
-                </label>
-              )
-            })}
-        </fieldset>
-        
-        <div className="formGroup">
-          <label htmlFor="approvedFEDME">Homologación FEDME</label>
-          <select
-            id="approvedFEDME"
-            name="approvedFEDME"
-            value={formData.approvedFEDME}
-            onChange={handleChange}
-          >
-            <option value="">Selecciona el tipo de homologación</option>
-              {options.approvedFEDME.map((approved) => {
-                return (
-                <option key={approved} value={approved}>
-                  {approved}
-                  </option>
-                  )
-              })}
-          </select>
-        </div>
-
-        <div className="formGroup">
-          <label htmlFor="image">URL de la imagen</label>
-          <input
-            id="image"
-            name="image"
-            type="url"
-            value={formData.image}
-            onChange={handleChange}
-            placeholder="https://..."
-          />
-        </div>
-
-        <div className="formGroup">
-          <label htmlFor="mapsLink">URL de la ubicación</label>
-          <input
-            id="mapsLink"
-            name="mapsLink"
-            type="url"
-            value={formData.mapsLink}
-            onChange={handleChange}
-            placeholder="https://..."
-          />
-        </div>
-
-        <fieldset className="formGroup">
-          <legend>Accesos al agua</legend>
-            {options.accessWater.map((water) => {
-              return (
-                <label key={water}>
-                  <input
-                    type="checkbox"
-                    name="accessWater"
-                    value={water}
-                    checked={formData.accessWater.includes(water)}
-                    onChange={handleArrayChange}
-                  />
-                  {water}
-                </label>
-              )
-            })}
-        </fieldset>
-
-        {error && <p className="errorMessage">{error}</p>}
-        
-        <button className='btnPublish' type='submit' disabled={submit}>
-          {submit
-          ? (editMode ? 'Guardando...' : 'Publicando...')
-          : (editMode ? 'Guardar cambios' : 'Publicar ruta')}
-        </button>
-      </form>
+          {error && <p className="errorMessage">{error}</p>}
+          
+          <button className='btnPublish' type='submit' disabled={submit}>
+            {submit
+            ? (editMode ? 'Guardando...' : 'Publicando...')
+            : (editMode ? 'Guardar cambios' : 'Publicar ruta')}
+          </button>
+        </form>
+      </main>
     </>
   )
 }
