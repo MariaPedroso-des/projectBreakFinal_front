@@ -60,7 +60,7 @@ const HikingDetailPage = () => {
 
       <main className="pageContainer">
         <section className="section">
-          <Link to="/hikings">← volver a rutas</Link>
+          <Link to="/hikings">← Volver a rutas</Link>
         </section>
 
         <div className="card">

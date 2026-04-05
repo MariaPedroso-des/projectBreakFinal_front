@@ -365,8 +365,14 @@ btnHome a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.9rem 1rem;
+  padding: 1rem 1rem;
+  margin-right: 0.5rem;
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   font-weight: 600;
+}
+button:hover,
+btnHome:hover a {
+  transform: translateY(-2.5px);
+  background-color: #d3d3d3;
 }

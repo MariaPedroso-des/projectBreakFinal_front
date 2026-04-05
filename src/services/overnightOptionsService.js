@@ -19,6 +19,7 @@ export const getOvernightOptions = async (urlAPI) => {
     fetch(`${urlAPI}/api/utils/services`),
     fetch(`${urlAPI}/api/utils/proximity`),
     fetch(`${urlAPI}/api/utils/signal`),
+    fetch(`${urlAPI}/api/utils/stay`),
     fetch(`${urlAPI}/api/utils/limitations`),
   ])
 
@@ -29,13 +30,12 @@ export const getOvernightOptions = async (urlAPI) => {
   const stay = await getJsonorError(stayResponse, 'Error al cargar la estancia')
   const limitations = await getJsonorError(limitationsResponse, 'Error al cargar las limitaciones')
 
-  return ([
+  return {
     province, 
     services,
     proximity,
     signal,
     stay,
     limitations,
-  ])
-
+  }
 }

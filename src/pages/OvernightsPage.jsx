@@ -6,6 +6,7 @@ import Loader from '../components/Loader.jsx'
 import OvernightsFilters from '../components/OvernightsFilters.jsx'
 import { getOvernightOptions } from '../services/overnightOptionsService.js'
 import { getAllOvernights } from '../services/overnightsService.js'
+import styles from './ListPage.module.css'
 
 
 const OvernightsPage = () => {
@@ -35,10 +36,10 @@ const OvernightsPage = () => {
   const [loading, setLoading] =useState(true)
   const [error, setError] = useState(null)
   
-  const capacity = Math.max(...overnights.map((e) => e.capacity || 1))
+  const capacity = overnights.length > 0 ? Math.max(...overnights.map((e) =>e.capacity || 1 )) : 1
   
   useEffect(() => {
-    const fetchPageDate = async () => {
+    const fetchPageData = async () => {
       try {
         setLoading(true)
         setError(null)
@@ -71,7 +72,7 @@ const OvernightsPage = () => {
         setLoading(false)
       }
     }
-    fetchPageDate()
+    fetchPageData()
   }, [urlAPI])
 
   const handleFiltersChange = (e) => {
@@ -195,24 +196,41 @@ const OvernightsPage = () => {
   return (
     <>
       <Navbar />
-      <h1>zonas de pernocta para descansar</h1>
-      <OvernightsFilters 
-        filters={filters}
-        handleFiltersChange={handleFiltersChange}
-        filtersConfig={filtersConfig}
-        resetFilters={resetFilters}
-      />
-      <section>
-        {filteredOvernights.length === 0 ? (
-          <p>Aún no existen rutas que coincidan con tu búsqueda</p>
-        ) : (
-          filteredOvernights.map((e) => (
-            <div key={e._id}>
-              <Link to={`/overnights/${e._id}`}>{e.name} - {e.province} - {e.limitations}</Link>
-            </div>
-          ))
-        )}
-      </section>
+
+      <main className="pageContainer">
+        <section className="section">
+          <h1 className={styles.pageTitle}>Zonas de pernocta para descansar</h1>
+          <OvernightsFilters 
+            filters={filters}
+            handleFiltersChange={handleFiltersChange}
+            filtersConfig={filtersConfig}
+            resetFilters={resetFilters}
+          />
+        <section className={styles.cardsGrid}>
+          {filteredOvernights.length === 0 ? (
+            <p className={styles.emptyState}>Aún no existen zonas de pernocta que coincidan con tu búsqueda</p>
+          ) : (
+            filteredOvernights.map((e) => (
+              <article key={e._id} className={styles.itemCard}>
+                  <Link to={`/overnights/${e._id}`} className={styles.cardLink}>
+                  <div className={styles.cardThumb}>
+                    {e.image ? (<img src={e.image} alt={e.name} />) : null}
+                  </div>
+                  <div>
+                    <h2 className={styles.cardName}>{e.name}</h2>
+                    <p className={styles.cardInfo}>{e.province}</p>
+                    <p className={styles.cardInfo}>{e.capacity}</p>
+                  </div>
+                  </Link>
+
+              </article>
+            ))
+          )}
+        </section>
+
+        </section>
+
+      </main>
     </>
   )
 }

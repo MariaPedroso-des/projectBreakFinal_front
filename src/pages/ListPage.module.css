@@ -8,7 +8,7 @@
   gap: 1rem;
 }
 
-.routeCard {
+.itemCard {
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -19,7 +19,7 @@
   transition: transform 0.2s ease, box-shadow 0.2 ease, boder-color 0.2 ease;
 }
 
-.routeCard:hover {
+.itemCard:hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow-md);
   border-color: rgba(0, 0, 0, 0.2);
@@ -31,7 +31,7 @@
   color: var(--color-text-soft);
 }
 
-.routeThumb {
+.cardThumb {
   width: 100%;
   aspect-ratio: 16 / 10;
   overflow: hidden;
@@ -40,27 +40,29 @@
   background-color: #eef1eb;
 }
 
-.routeThumb img {
+.cardThumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.routeName {
+.cardName {
   font-size: 1rem;
+  margin-left: 0.5rem;
   font-weight: 700;
   color: var(--color-heading);
 }
 
-.routeLink {
+.cardLink {
   font-size: 0.9rem;
   line-height: 1.5;
   color: var(--color-text-soft);
 }
 
-.routeInfo {
+.cardInfo {
   font-size: 0.9rem;
+  margin-left: 0.5rem;
   line-height: 1.5;
   color: var(--color-text-soft);
 }

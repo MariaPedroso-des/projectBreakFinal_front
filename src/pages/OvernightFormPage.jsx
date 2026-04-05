@@ -379,8 +379,8 @@ const OvernightFormPage = () => {
 
         {error && <p className="errorMessage">{error}</p>}
         
-        <button className='btnPublish' type='submit' disabled={loading}>
-          {loading ? 'Publicando...' : 'Publicar zona de pernocta'}
+        <button className='btnPublish' type='submit' disabled={submit}>
+          {submit ? 'Publicando...' : 'Publicar zona de pernocta'}
         </button>
       </form>
     </>

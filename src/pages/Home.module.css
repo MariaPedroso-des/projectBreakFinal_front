@@ -1,0 +1,92 @@
+.homePage {
+ width: min(100% - 2rem), var(--container-width);
+ margin-inline: auto;
+ padding: 4rem 0 4rem;
+}
+
+.heroHome {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.brandHome {
+  margin-bottom: 1rem;
+}
+
+.tagLine {
+  max-width: 700px;
+  margin-inline: auto;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  color: var(--color-text-soft)
+}
+
+.ctaGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.ctaCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2 ease, border-color 0.2 ease;
+}
+
+.ctaCard:hover {
+  transform: translateY(-5px);
+}
+
+.ctaEyebrow {
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  
+}
+
+.ctaTitle {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+  line-height: 1.25;
+}
+
+.ctaText {
+  max-width: 34ch;
+  line-height: 1.5;
+}
+
+.ctaRoutes {
+  background-color: #749633;
+}
+
+.ctaOvernights {
+  background-color: #a65634;
+}
+
+.ctaPublish {
+  background-color: #617ea4;
+}
+
+/*copia*/
+@media (min-width: 768px) {
+  .homePage {
+    padding: 4rem 0 5rem;
+  }
+
+  .ctaGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .ctaCard {
+    min-height: 260px;
+    padding: 1.75rem;
+  }
+}

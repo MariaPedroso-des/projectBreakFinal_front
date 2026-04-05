@@ -196,15 +196,15 @@ const HikingsPage = () => {
             <p className={styles.emptyState}>Aún no existen rutas que coincidan con tu búsqueda</p>
           ) : (
             filteredHikings.map((e) => (
-              <article key={e._id} className="routeCard">
-                <Link to={`/hikings/${e._id}`} className={styles.routeLink}>
-                  <div className={styles.routeThumb}>
+              <article key={e._id} className={styles.itemCard}>
+                <Link to={`/hikings/${e._id}`} className={styles.cardLink}>
+                  <div className={styles.cardThumb}>
                     {e.image ? (<img src={e.image} alt={e.name} />) : null}
                   </div>
                   <div>
-                    <h2 className={styles.routeName}>{e.name}</h2>
-                    <p className={styles.routeInfo}>{e.province}</p>
-                    <p className={styles.routeInfo}>{e.distanceKm} km</p>
+                    <h2 className={styles.cardName}>{e.name}</h2>
+                    <p className={styles.cardInfo}>{e.province}</p>
+                    <p className={styles.cardInfo}>{e.distanceKm} km</p>
                   </div>
                 </Link>
               </article>

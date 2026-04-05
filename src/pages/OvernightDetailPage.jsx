@@ -60,7 +60,7 @@ const OvernightDetailPage = () => {
 
       <main className="pageContainer">
         <section className="section">
-          <Link to="/overnights">← volver a pernoctas</Link>
+          <Link to="/overnights">← Volver a pernoctas</Link>
         </section>
 
         <div className="card">

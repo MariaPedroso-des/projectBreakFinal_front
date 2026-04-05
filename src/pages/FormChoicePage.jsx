@@ -1,24 +1,40 @@
 import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
+import styles from './FormChoicePage.module.css'
 
 const FormChoicePage = () => {
   return(
     <>
       <Navbar />
-      <section>
-        <h1>¿Qué quieres publicar?</h1>
-        <h3>Elige si quieres añadir una ruta o una zona de pernocta</h3>
-      </section>
-      <section>
-        <div>
-          <h4>Comparte una ruta de senderismo para hacer con perro</h4>
-          <Link to="/hikings/new">Subir ruta</Link>
-        </div>
-        <div>
-          <h4>Comparte una zona donde descansar con tu camper y tu perro</h4>
-          <Link to="/overnights/new">Subir pernocta</Link>         
-        </div>
-      </section>
+
+      <main className={styles.choicePage}>
+        <section className="section">
+          <Link to="/">← Volver</Link>
+        </section>
+        
+        <section className={styles.choiceHero}>
+          <h1>¿Qué quieres publicar?</h1>
+          <h3 className={styles.choiceIntro}>
+            Elige si quieres añadir una ruta o una zona de pernocta
+          </h3>
+        </section>
+      <section className={styles.choiceGrid}>
+          <Link to="/overnights/new" className={`${styles.choiceCard} ${styles.choiceRoutes}`}>
+            <span className={styles.choiceEyebrow}>Subir ruta</span>
+            <h2 className={styles.choiceTitle}>Rutas</h2>
+            <p className={styles.choiceText}>
+              Comparte una ruta de senderismo para hacer con perrete
+            </p>
+          </Link>
+          <Link to="/overnights/new" className={`${styles.choiceCard} ${styles.choiceOvernights}`}>
+            <span className={styles.choiceEyebrow}>Subir pernocta</span>
+            <h2 className={styles.choiceTitle}>Pernoctas</h2>
+            <p className={styles.choiceText}>
+              Comparte una zona donde descansar con tu camper y tu perrete
+            </p>
+          </Link>
+        </section>
+      </main>
     </>
   )
 }
