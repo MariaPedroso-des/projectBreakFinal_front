@@ -20,6 +20,9 @@ const HikingDetailPage = () => {
       try {
         setError(null)
 
+        await new Promise((resolve) => setTimeout(resolve, 3000))
+
+
         const data = await getHikingById(urlAPI, id)
         setHiking(data)
       } catch (error) {
@@ -58,42 +61,43 @@ const HikingDetailPage = () => {
     <>
       <Navbar />
 
-      <section>
-        <Link to="/hikings">← volver a rutas</Link>
-      </section>
+      <main className="pageContainer">
+        <section className="section">
+          <Link to="/hikings">← volver a rutas</Link>
+        </section>
 
-      <div>
-        {/*SOLO RENDERIZA  SI VIENE IMG*/}
-        {hiking.image && <img src={hiking.image} alt={hiking.name} />}
-        <h1>{hiking.name}</h1>
-      </div>
-
-      <div>
-        <div>
-          <p><strong>Distancia en kilómetros:</strong> {hiking.distanceKm}</p>
-          <p><strong>Provincia:</strong> {hiking.province}</p>
+        <div className="card">
+          <section className="sectionCard">
+            {/*SOLO RENDERIZA  SI VIENE IMG*/}
+            {hiking.image && <img src={hiking.image} alt={hiking.name} />}
+            <h1>{hiking.name}</h1>
+          </section>
         </div>
 
-        <p><strong>Dificultad:</strong> {hiking.difficulty}</p>
-        <p><strong>Homologación:</strong> {hiking.approvedFEDME}</p>
-        <p><strong>Ubicación del inicio de la ruta:</strong>
-          {hiking.mapsLink ? (
-            <a href={hiking.mapsLink} target="_blank" rel="noreferrer"> Ver</a>
-          ) : (
-            ' No disponible'
-          )}
-        </p>
-        <p><strong>Descripción:</strong> {hiking.description}</p>
-        <p><strong>Descripción del terreno:</strong> {Array.isArray(hiking.typeTerrain) ? hiking.typeTerrain.join(', ') : hiking.typeTerrain}</p>
-        <p><strong>Acceso a agua durante la ruta:</strong> {Array.isArray(hiking.accessWater) ? hiking.accessWater.join(', ') : hiking.accessWater}</p>
-      </div>
+        <section className="sectionCard">
+          <p><strong>Distancia en kilómetros:</strong> {hiking.distanceKm}</p>
+          <p><strong>Provincia:</strong> {hiking.province}</p>
+          <p><strong>Dificultad:</strong> {hiking.difficulty}</p>
+          <p><strong>Homologación:</strong> {hiking.approvedFEDME}</p>
+          <p><strong>Ubicación del inicio de la ruta:</strong>
+            {hiking.mapsLink ? (
+              <a href={hiking.mapsLink} target="_blank" rel="noreferrer"> Ver</a>
+            ) : (
+              ' No disponible'
+            )}
+          </p>
+          <p><strong>Descripción:</strong> {hiking.description}</p>
+          <p><strong>Descripción del terreno:</strong> {Array.isArray(hiking.typeTerrain) ? hiking.typeTerrain.join(', ') : hiking.typeTerrain}</p>
+          <p><strong>Acceso a agua durante la ruta:</strong> {Array.isArray(hiking.accessWater) ? hiking.accessWater.join(', ') : hiking.accessWater}</p>
+        </section>
 
-      <section>
-        <Link to={`/hikings/edit/${hiking._id}`}>
-          <button type="button">Editar</button>
-        </Link>
-        <button type="button" onClick={handleDelete}>Eliminar</button>
-      </section>
+        <section className="section">
+          <Link to={`/hikings/edit/${hiking._id}`}>
+            <button type="button">Editar</button>
+          </Link>
+          <button type="button" onClick={handleDelete}>Eliminar</button>
+        </section>
+      </main>
     </>
   )
 }

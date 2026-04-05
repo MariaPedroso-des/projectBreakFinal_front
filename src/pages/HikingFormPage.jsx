@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+
 import Navbar from '../components/Navbar.jsx'
+import Loader from '../components/Loader.jsx'
 import { getHikingOptions } from '../services/hikingOptionsService.js'
 import { getHikingById, createHiking, updateHiking } from '../services/hikingsService.js'
 
@@ -186,7 +188,7 @@ const HikingFormPage = () => {
       setSubmit(false)
     }
   }
-  if (loadingOptions || loadingHiking) return <p>Cargango página...</p>
+  if (loadingOptions || loadingHiking) return <Loader />
 
   return (
     <>
@@ -195,7 +197,7 @@ const HikingFormPage = () => {
         <h1>{editMode ? 'Editar ruta' : 'Publicar nueva ruta'}</h1>
       </section>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="formGroup">
           <label htmlFor="name">Nombre</label>
           <input 
             id="name"
@@ -208,7 +210,7 @@ const HikingFormPage = () => {
           />
         </div>
 
-        <div>
+        <div className="formGroup">
           <label htmlFor="description">Descripción</label>
           <textarea 
             id="description"
@@ -220,7 +222,7 @@ const HikingFormPage = () => {
           />
         </div>
         
-        <div>
+        <div className="formGroup">
           <label htmlFor="province">Provincia</label>
           <select
             id="province"
@@ -240,7 +242,7 @@ const HikingFormPage = () => {
           </select>
         </div>
 
-        <div>
+        <div className="formGroup">
           <label htmlFor="difficulty">Dificultad</label>
           <select
             id="difficulty"
@@ -260,7 +262,7 @@ const HikingFormPage = () => {
           </select>
         </div>
 
-        <div>
+        <div className="formGroup">
           <label htmlFor="distanceKm">Distancia en kilómetros</label>
           <input 
             id="distanceKm"
@@ -276,7 +278,7 @@ const HikingFormPage = () => {
           />
         </div>
 
-        <fieldset>
+        <fieldset className="formGroup">
           <legend>Tipos de terreno</legend>
             {options.typeTerrain.map((terrain) => {
               return (
@@ -294,7 +296,7 @@ const HikingFormPage = () => {
             })}
         </fieldset>
         
-        <div>
+        <div className="formGroup">
           <label htmlFor="approvedFEDME">Homologación FEDME</label>
           <select
             id="approvedFEDME"
@@ -313,7 +315,7 @@ const HikingFormPage = () => {
           </select>
         </div>
 
-        <div>
+        <div className="formGroup">
           <label htmlFor="image">URL de la imagen</label>
           <input
             id="image"
@@ -325,7 +327,7 @@ const HikingFormPage = () => {
           />
         </div>
 
-        <div>
+        <div className="formGroup">
           <label htmlFor="mapsLink">URL de la ubicación</label>
           <input
             id="mapsLink"
@@ -337,7 +339,7 @@ const HikingFormPage = () => {
           />
         </div>
 
-        <fieldset>
+        <fieldset className="formGroup">
           <legend>Accesos al agua</legend>
             {options.accessWater.map((water) => {
               return (
@@ -355,7 +357,7 @@ const HikingFormPage = () => {
             })}
         </fieldset>
 
-        {error && <p>{error}</p>}
+        {error && <p className="errorMessage">{error}</p>}
         
         <button className='btnPublish' type='submit' disabled={submit}>
           {submit

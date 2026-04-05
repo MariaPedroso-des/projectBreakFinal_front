@@ -1,11 +1,14 @@
 const Loader = () => {
   return (
-    <div className='spinner wave-dots' aria-label='Cargando'>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
+    <div className="loaderContainer">
+      <div className='wave-dots' aria-label='Cargando'>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
     </div>
   )
 }

@@ -19,7 +19,7 @@ export const getAllOvernights = async (urlAPI) => {
   return data.overnights || []
 }
 
-export const getOVernightById = async (urlAPI, id) => {
+export const getOvernightById = async (urlAPI, id) => {
   const response = await fetch(`${urlAPI}/api/overnights/${id}`)
 
   if(!response.ok) {

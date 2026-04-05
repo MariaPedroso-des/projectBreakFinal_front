@@ -123,7 +123,7 @@ legend {
   --color-accent: var(--lime);
 
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.06);
-  --shadow-sm: 0 12px 30px rgba(0, 0, 0, 0.10);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.10);
   
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
@@ -246,6 +246,96 @@ button:active {
 }
 
 .container {
-  width: min(100% - 2rem, var(--container-width));
+  width: min(100% - 2rem);
   margin-inline: auto;
+}
+
+.loaderContainer {
+  min-height: 100vh ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wave-dots {
+  width: 100px;
+  height: 40px;
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  justify-items: center;
+  gap: 6px;
+}
+
+.wave-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  animation: wave 0.9s ease-in-out infinite;
+}
+
+.wave-dots span:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.wave-dots span:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.wave-dots span:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.wave-dots span:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+.pageContainer {
+  width: min(100% - 2 rem, var(--container-width));
+  margin-inline: auto;
+  padding-block: 2rem 4rem;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.sectionCard {
+  margin-bottom: 1.5rem;
+}
+
+.section button + button {
+  margin-left: 0.8rem;
+}
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--shadow-sm);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.formGroup {
+  margin-top: 1rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.errorMessage {
+
 }

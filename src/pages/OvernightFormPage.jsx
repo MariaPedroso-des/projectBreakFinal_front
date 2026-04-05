@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+
 import Navbar from '../components/Navbar.jsx'
+import Loader from '../components/Loader.jsx'
 import { getOVernightById,createOvernight, updateOvernight } from '../services/overnightsService.js'
 import { getOvernightOptions } from '../services/overnightOptionsService.js'
 
@@ -188,7 +190,7 @@ const OvernightFormPage = () => {
       setSubmit(false)
     }
   }
-  if (loadingOptions || loadingOvernight) return <p>Cargango página...</p>
+  if (loadingOptions || loadingOvernight) return <Loader />
 
   return (
     <>

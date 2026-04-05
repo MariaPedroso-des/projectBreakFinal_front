@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 
 import Navbar from '../components/Navbar.jsx'
 import Loader from '../components/Loader.jsx'
-import { getOVernightById, deleteOvernight } from '../services/overnightsService.js'
+import { getOvernightById, deleteOvernight } from '../services/overnightsService.js'
 
 const OvernightDetailPage = () => {
   const { id } = useParams()
@@ -20,7 +20,7 @@ const OvernightDetailPage = () => {
       try {
         setError(null)
 
-        const data = await getOVernightById(urlAPI,id)
+        const data = await getOvernightById(urlAPI,id)
         setOvernight(data)
       } catch (error) {
         console.log(error)
@@ -57,43 +57,44 @@ const OvernightDetailPage = () => {
   return (
     <>
       <Navbar />
-      
-      <section>
-        <Link to="/overnights">← volver a pernoctas</Link>
-      </section>
 
-      <div>
-        {/*SOLO RENDERIZA  SI VIENE IMG*/}
-        {overnight.image && <img src={overnight.image} alt={overnight.name} />}
-        <h1>{overnight.name}</h1>
-      </div>
+      <main className="pageContainer">
+        <section className="section">
+          <Link to="/overnights">← volver a pernoctas</Link>
+        </section>
 
-      <div>
-        <div>
-          <p><strong>Provincia: </strong> {overnight.province}</p>
-          <p><strong>Servicios: </strong> {Array.isArray(overnight.services) ? overnight.services.join(', ') : overnight.services}</p>
+        <div className="card">
+          <section className="sectionCard">
+          {/*SOLO RENDERIZA  SI VIENE IMG*/}
+          {overnight.image && <img src={overnight.image} alt={overnight.name} />}
+          <h1>{overnight.name}</h1>
+          </section>
         </div>
 
-        <p><strong>Capacidad: </strong> {overnight.capacity}</p>
-        <p><strong>Proximidad: </strong> {Array.isArray(overnight.proximity) ? overnight.proximity.join(', ') : overnight.proximity}</p>
-        <p><strong>Ubicación:</strong>
-          {overnight.mapsLink ? (
-            <a href={overnight.mapsLink} target="_blank" rel="noreferrer"> Ver</a>
-          ) : (
-            ' No disponible'
-          )}
-        </p>
-        <p><strong>Descripción: </strong> {overnight.description}</p>
-        <p><strong>Estancia: </strong> {overnight.stay}</p>
-        <p><strong>Limitaciones: </strong> {Array.isArray(overnight.limitations) ? overnight.limitations.join(', ') : overnight.limitations}</p>
-      </div>
+        <section className="sectionCard">
+          <p><strong>Provincia: </strong> {overnight.province}</p>
+          <p><strong>Servicios: </strong> {Array.isArray(overnight.services) ? overnight.services.join(', ') : overnight.services}</p>
+          <p><strong>Capacidad: </strong> {overnight.capacity}</p>
+          <p><strong>Proximidad: </strong> {Array.isArray(overnight.proximity) ? overnight.proximity.join(', ') : overnight.proximity}</p>
+          <p><strong>Ubicación:</strong>
+            {overnight.mapsLink ? (
+              <a href={overnight.mapsLink} target="_blank" rel="noreferrer"> Ver</a>
+            ) : (
+              ' No disponible'
+            )}
+          </p>
+          <p><strong>Descripción: </strong> {overnight.description}</p>
+          <p><strong>Estancia: </strong> {overnight.stay}</p>
+          <p><strong>Limitaciones: </strong> {Array.isArray(overnight.limitations) ? overnight.limitations.join(', ') : overnight.limitations}</p>
+        </section>
 
-      <section>
-        <Link to={`/overnights/edit/${overnight._id}`}>
-          <button type="button">Editar</button>
-        </Link>
-        <button type="button" onClick={handleDelete}>Eliminar</button>
-      </section>
+        <section className="section">
+          <Link to={`/overnights/edit/${overnight._id}`}>
+            <button type="button">Editar</button>
+          </Link>
+          <button type="button" onClick={handleDelete}>Eliminar</button>
+        </section>
+      </main>
     </>
   )
 }
