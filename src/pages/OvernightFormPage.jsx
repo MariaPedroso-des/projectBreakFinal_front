@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import Navbar from '../components/Navbar.jsx'
 import Loader from '../components/Loader.jsx'
-import { getOvernightById,createOvernight, updateOvernight } from '../services/overnightsService.js'
+import { getOvernightById, createOvernight, updateOvernight } from '../services/overnightsService.js'
 import { getOvernightOptions } from '../services/overnightOptionsService.js'
 
 
@@ -178,7 +178,8 @@ const OvernightFormPage = () => {
 
       if(editMode) {
         await updateOvernight(urlAPI, id, payload)
-      } else createOvernight(urlAPI, payload)
+      } else 
+        await createOvernight(urlAPI, payload)
 
       alert(editMode ? 'Zona de pernocta editada con éxito' : 'Zona de pernocta creada con éxito')
       navigate('/overnights')
@@ -382,7 +383,10 @@ const OvernightFormPage = () => {
           {error && <p className="errorMessage">{error}</p>}
           
           <button className='btnPublish' type='submit' disabled={submit}>
-            {submit ? 'Publicando...' : 'Publicar zona de pernocta'}
+            {submit 
+            ? 
+            (editMode ? 'Guardando...' : 'Publicando...') 
+            : (editMode ? 'Guardar cambios' : 'Publicar zona de pernocta')}
           </button>
         </form>
 

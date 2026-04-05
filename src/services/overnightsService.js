@@ -48,8 +48,8 @@ export const createOvernight = async (urlAPI, payload) => {
 }
 
 export const updateOvernight = async (urlAPI, id, payload) => {
-  const response = await fetch(`${urlAPI}/api/overnights/${id}`, {
-    method: 'POST',
+  const response = await fetch(`${urlAPI}/api/overnights/edit/${id}`, {
+    method: 'PUT',
     headers: {
       'Content-type': 'application/json',
     },
