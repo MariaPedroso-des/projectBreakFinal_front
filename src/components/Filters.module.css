@@ -1,0 +1,121 @@
+.filterSec {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.filterItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterControl {
+  width: 100%;
+}
+
+.rangeWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rangeLabel {
+  font-weight: 600;
+  margin-top: 1rem;
+  color: var(--color-heading);
+}
+
+.rangeValue {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 0.5rem;
+}
+
+.filtersActions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .filtersSec {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .filtersActions {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1100px) {
+  .filtersSec {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/*copia*/
+/* RANGE */
+.filterControl[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+/* Track Chrome / Edge / Safari */
+.filterControl[type='range']::-webkit-slider-runnable-track {
+  height: 4px;
+  background: rgba(208, 245, 54, 0.28);
+  border-radius: 999px;
+}
+
+/* Thumb Chrome / Edge / Safari */
+.filterControl[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -7px;
+  border-radius: 50%;
+  border: 2px solid var(--color-surface);
+  background: var(--color-accent);
+  box-shadow: 0 2px 10px rgba(146, 160, 88, 0.25);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* Track Firefox */
+.filterControl[type='range']::-moz-range-track {
+  height: 4px;
+  background: rgba(208, 245, 54, 0.28);
+  border-radius: 999px;
+}
+
+/* Thumb Firefox */
+.filterControl[type='range']::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--color-surface);
+  background: var(--color-accent);
+  box-shadow: 0 2px 10px rgba(146, 160, 88, 0.25);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* efecto más marcado al interactuar */
+.filterControl[type='range']:hover::-webkit-slider-thumb,
+.filterControl[type='range']:active::-webkit-slider-thumb {
+  transform: scale(1.18);
+  box-shadow: 0 4px 14px rgba(146, 160, 88, 0.35);
+}
+
+.filterControl[type='range']:hover::-moz-range-thumb,
+.filterControl[type='range']:active::-moz-range-thumb {
+  transform: scale(1.18);
+  box-shadow: 0 4px 14px rgba(146, 160, 88, 0.35);
+}

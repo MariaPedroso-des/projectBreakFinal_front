@@ -6,7 +6,7 @@ const Home = () => {
     <>
       <Navbar />
       <section className="heroHome">
-        <h1>TRAVIA</h1>
+        <h1 className="brandTitle brandTitle--hero">TRAVIA</h1>
         <h3>rutas y paradas pet-friendly para viajar juntos</h3>
       </section>
       <section className='btnHome'>

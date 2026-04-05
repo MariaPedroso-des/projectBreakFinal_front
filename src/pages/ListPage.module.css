@@ -1,0 +1,66 @@
+.pageTitle {
+  margin-bottom: 1.5rem;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.routeCard {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2 ease, boder-color 0.2 ease;
+}
+
+.routeCard:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.emptyState {
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--color-text-soft);
+}
+
+.routeThumb {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background-color: #eef1eb;
+}
+
+.routeThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.routeName {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+.routeLink {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text-soft);
+}
+
+.routeInfo {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text-soft);
+}

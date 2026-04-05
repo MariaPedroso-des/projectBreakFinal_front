@@ -98,8 +98,8 @@ legend {
   2. VARIABLES 
 =============== */
 :root {
-  --font-body: system-ui, 'Alan Sans', sans-serif;
-  --font-brand: system-ui, 'Climate Crisis', sans-serif;
+  --font-body: 'Alan Sans', system-ui, sans-serif;
+  --font-brand: 'Climate Crisis', system-ui, sans-serif;
 
   --coral: #F54936;
   --blue:  #3689F5;
@@ -147,7 +147,7 @@ legend {
     --color-border: rgba(255, 255, 255, 0.12);
 
     --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
-    --shadow-sm: 0 12px 30px rgba(0, 0, 0, 0.40);
+    --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.40);
 
     color-scheme: dark;
   }
@@ -212,6 +212,10 @@ label {
   color: var(--color-heading)
 }
 
+textarea {
+  resize: vertical;
+}
+
 input,
 textarea,
 select {
@@ -220,10 +224,6 @@ select {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   background-color: var(--color-surface);
-}
-
-textarea {
-  resize: verical;
 }
 
 input:focus,
@@ -303,9 +303,14 @@ button:active {
   }
 }
 
+.container,
 .pageContainer {
-  width: min(100% - 2 rem, var(--container-width));
+  width: min(100% - 2rem, var(--container-width));
   margin-inline: auto;
+
+}
+
+.pageContainer {
   padding-block: 2rem 4rem;
 }
 
@@ -324,18 +329,44 @@ button:active {
 .card {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--shadow-sm);
-  padding: 1.5rem;
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
+  padding: 1.5rem;
 }
 
 .formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.errorMessage {
   margin-top: 1rem;
   color: var(--color-primary);
   font-weight: 600;
   line-height: 1.5;
 }
 
-.errorMessage {
+.brandTitle {
+  font-family: var(--font-brand);
+  letter-spacing: 0.05em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
 
+.brandTitle--hero {
+  font-size: clamp(3rem, 10vw, 6rem);
+}
+
+img {
+  border-radius: inherit;
+}
+
+button,
+btnHome a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font-weight: 600;
 }

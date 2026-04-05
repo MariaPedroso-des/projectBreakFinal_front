@@ -1,35 +1,39 @@
 //aqui tienen que ir condicionales, si es tipo select.. X, si es range, otros campos. Tendría que hacer map por todos los filtros
+import styles from './Filters.module.css'
 
 const HikingsFilters = ({ filters, handleFiltersChange, filtersConfig, resetFilters }) => {
   return (
-    <section className="filtersSec">
+    <section className={styles.filtersSec}>
       {filtersConfig.map((filter) => {
         if (filter.type === 'select') {
           return (
-            <select
-              key={filter.name} 
-              name={filter.name}
-              value={filters[filter.name]} 
-              onChange={handleFiltersChange}
-              >
-                <option value="">{filter.defaultOption}</option>
-                  {filter.options.map((option) => {
-                    return (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                    )
-                })}
-            </select>
+            <div key={filter.name} className={styles.filterItem}>
+              <select
+                key={filter.name} 
+                name={filter.name}
+                value={filters[filter.name]} 
+                onChange={handleFiltersChange}
+                >
+                  <option value="">{filter.defaultOption}</option>
+                    {filter.options.map((option) => {
+                      return (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                      )
+                  })}
+              </select>
+            </div>
           )
         }
         if(filter.type === 'range') {
           return (
-            <div key={filter.name}>
-              <label htmlFor={filter.name}>
-                {filter.label}: {filters[filter.name]} km
+            <div key={filter.name} className={styles.rangeWrap}>
+              <label htmlFor={filter.name} className={styles.rangeLabel}>
+                {filter.label}: <span className={styles.rangeValue}>{filters[filter.name]} km</span>
               </label>
               <input 
+                className={styles.filterControl}
                 type="range"
                 id={filter.name}
                 name={filter.name}
@@ -44,7 +48,7 @@ const HikingsFilters = ({ filters, handleFiltersChange, filtersConfig, resetFilt
         }
         return null
       })}
-      <div>
+      <div className={styles.filtersActions}>
         <button type="button" onClick={resetFilters}>Limpiar filtros</button>
       </div>
   </section>

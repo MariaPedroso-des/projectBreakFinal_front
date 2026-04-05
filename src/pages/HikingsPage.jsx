@@ -7,6 +7,8 @@ import HikingsFilters from '../components/HikingsFilters.jsx'
 import { getAllHikings } from '../services/hikingsService.js'
 import { getHikingOptions } from '../services/hikingOptionsService.js'
 
+import styles from './ListPage.module.css'
+
 const HikingsPage = () => {
   const urlAPI = import.meta.env.VITE_APP_API_URL
 
@@ -177,24 +179,39 @@ const HikingsPage = () => {
   return (
     <>
       <Navbar />
-      <h1>Rutas para moverse juntos</h1>
-      <HikingsFilters 
-        filters={filters}
-        handleFiltersChange={handleFiltersChange}
-        filtersConfig={filtersConfig}
-        resetFilters={resetFilters}
-      />
-      <section>
-        {filteredHikings.length === 0 ? (
-          <p>Aún no existen rutas que coincidan con tu búsqueda</p>
-        ) : (
-          filteredHikings.map((e) => (
-            <div key={e._id}>
-              <Link to={`/hikings/${e._id}`}>{e.name} - {e.province} - {e.distanceKm} km</Link>
-            </div>
-          ))
-        )}
-      </section>
+
+      <main className="pageContainer">
+        <section className="section">
+          <h1 className={styles.pageTitle}>Rutas para moverse juntos</h1>
+          <HikingsFilters 
+            filters={filters}
+            handleFiltersChange={handleFiltersChange}
+            filtersConfig={filtersConfig}
+            resetFilters={resetFilters}
+          />
+        </section>
+
+        <section className={styles.cardsGrid}>
+          {filteredHikings.length === 0 ? (
+            <p className={styles.emptyState}>Aún no existen rutas que coincidan con tu búsqueda</p>
+          ) : (
+            filteredHikings.map((e) => (
+              <article key={e._id} className="routeCard">
+                <Link to={`/hikings/${e._id}`} className={styles.routeLink}>
+                  <div className={styles.routeThumb}>
+                    {e.image ? (<img src={e.image} alt={e.name} />) : null}
+                  </div>
+                  <div>
+                    <h2 className={styles.routeName}>{e.name}</h2>
+                    <p className={styles.routeInfo}>{e.province}</p>
+                    <p className={styles.routeInfo}>{e.distanceKm} km</p>
+                  </div>
+                </Link>
+              </article>
+            ))
+          )}
+        </section>
+      </main>
     </>
   )
 }

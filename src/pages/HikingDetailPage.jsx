@@ -20,9 +20,6 @@ const HikingDetailPage = () => {
       try {
         setError(null)
 
-        await new Promise((resolve) => setTimeout(resolve, 3000))
-
-
         const data = await getHikingById(urlAPI, id)
         setHiking(data)
       } catch (error) {

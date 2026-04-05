@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import Navbar from '../components/Navbar.jsx'
 import Loader from '../components/Loader.jsx'
-import { getOVernightById,createOvernight, updateOvernight } from '../services/overnightsService.js'
+import { getOvernightById,createOvernight, updateOvernight } from '../services/overnightsService.js'
 import { getOvernightOptions } from '../services/overnightOptionsService.js'
 
 
@@ -87,7 +87,7 @@ const OvernightFormPage = () => {
       try {
         setError(null)
 
-        const data = await getOVernightById(urlAPI, id)
+        const data = await getOvernightById(urlAPI, id)
 
         setFormData({
           name: data.name || '',
@@ -199,7 +199,7 @@ const OvernightFormPage = () => {
         <h1>{editMode ? 'Editar zona de pernocta' : 'Publicar nueva pernocta'}</h1>
       </section>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="formGroup">
           <label htmlFor="name">Nombre </label>
           <input 
             id="name"
@@ -212,7 +212,7 @@ const OvernightFormPage = () => {
           />
         </div>
 
-        <div>
+        <div className="formGroup">
           <label htmlFor="description">Descripción</label>
           <textarea 
             id="description"
@@ -224,7 +224,7 @@ const OvernightFormPage = () => {
           />
         </div>
         
-        <div>
+        <div className="formGroup">
           <label htmlFor="province">Provincia</label>
           <select
             id="province"
@@ -244,7 +244,7 @@ const OvernightFormPage = () => {
           </select>
         </div>
 
-        <div>
+        <div className="formGroup">
           <label htmlFor="capacity">Número aproximado de parcamientos</label>
           <input 
             id="capacity"
@@ -259,7 +259,7 @@ const OvernightFormPage = () => {
           />
         </div>
 
-        <fieldset>
+        <fieldset className="formGroup">
           <legend>Servicios </legend>
             {options.services.map((service) => {
               return (
@@ -277,7 +277,7 @@ const OvernightFormPage = () => {
             })}
         </fieldset>
 
-        <fieldset>
+        <fieldset className="formGroup">
           <legend>Proximidad</legend>
             {options.proximity.map((proximity) => {
               return (
@@ -295,7 +295,7 @@ const OvernightFormPage = () => {
             })}
         </fieldset>
 
-        <div>
+        <div className="formGroup">
           <label htmlFor="signal">Señal telefónica</label>
           <select
             id="signal"
@@ -315,7 +315,7 @@ const OvernightFormPage = () => {
           </select>
         </div>
 
-        <div>
+        <div className="formGroup">
           <label htmlFor="stay">Limitación de estancia</label>
           <select
             id="stay"
@@ -335,7 +335,7 @@ const OvernightFormPage = () => {
           </select>
         </div>
 
-        <fieldset>
+        <fieldset className="formGroup">
           <legend>Limitaciones generales</legend>
             {options.limitations.map((limitation) => {
               return (
@@ -353,7 +353,7 @@ const OvernightFormPage = () => {
             })}
         </fieldset>
 
-        <div>
+        <div className="formGroup">
           <label htmlFor="image">URL de la imagen</label>
           <input
             id="image"
@@ -365,7 +365,7 @@ const OvernightFormPage = () => {
           />
         </div>
 
-        <div>
+        <div className="formGroup">
           <label htmlFor="mapsLink">URL de la ubicación</label>
           <input
             id="mapsLink"
@@ -377,7 +377,7 @@ const OvernightFormPage = () => {
           />
         </div>
 
-        {error && <p>{error}</p>}
+        {error && <p className="errorMessage">{error}</p>}
         
         <button className='btnPublish' type='submit' disabled={loading}>
           {loading ? 'Publicando...' : 'Publicar zona de pernocta'}
