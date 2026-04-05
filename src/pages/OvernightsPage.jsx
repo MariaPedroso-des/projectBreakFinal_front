@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+
 import Navbar from '../components/Navbar.jsx'
+import Loader from '../components/Loader.jsx'
 import OvernightsFilters from '../components/OvernightsFilters.jsx'
 import { getOvernightOptions } from '../services/overnightOptionsService.js'
-import { getAllOvernights } from '../services/hikingsService.js'
+import { getAllOvernights } from '../services/overnightsService.js'
 
 
 const OvernightsPage = () => {
@@ -187,7 +189,7 @@ const OvernightsPage = () => {
     )
   })
 
-  if (loading) return <p>Cargando rutas...</p>
+  if (loading) return <Loader />
   if (error) return <p>{error}</p>
 
   return (

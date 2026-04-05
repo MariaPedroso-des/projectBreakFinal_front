@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
+import { getHikingOptions } from '../services/hikingOptionsService.js'
+import { getHikingById, createHiking, updateHiking } from '../services/hikingsService.js'
 
-  const initialFormData = {
+const initialFormData = {
     name: '',
     province: '',
     difficulty: 'sin definir',
@@ -14,6 +16,21 @@ import Navbar from '../components/Navbar.jsx'
     mapsLink: '',
     accessWater: []
   }
+
+const normalizeArray = (value) => {
+  return Array.isArray(value) ? value : [] 
+}
+
+const validUrl = (value) => {
+  if(!value) return true
+
+  try {
+    const url = new URL(value)
+    return url.protocol === 'http:' || url.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
 
 const HikingFormPage = () => {
   const navigate = useNavigate()
@@ -32,7 +49,7 @@ const HikingFormPage = () => {
     accessWater: []
   })
 
-  const [loading, setLoading] = useState(false)
+  const [submit, setSubmit] = useState(false)
   const [loadingOptions, setLoadingOptions] = useState(true)
   const [loadingHiking, setLoadingHiking] = useState(editMode)
   const [error, setError] = useState(null)
@@ -40,47 +57,14 @@ const HikingFormPage = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const [
-          provinceResponse,
-          difficultyResponse,
-          terrainResponse,
-          approvedResponse,
-          waterResponse,
-        ] = await Promise.all([
-          fetch(`${urlAPI}/api/utils/province`),
-          fetch(`${urlAPI}/api/utils/difficulty`),
-          fetch(`${urlAPI}/api/utils/terrain`),
-          fetch(`${urlAPI}/api/utils/approved`),
-          fetch(`${urlAPI}/api/utils/water`),
-        ])
-        if (
-          !provinceResponse.ok ||
-          !difficultyResponse.ok ||
-          !terrainResponse.ok ||
-          !approvedResponse.ok ||
-          !waterResponse.ok
-        ) {
-          setError('Error al cargar datos')
-          return
-        }
+        setError(null)
 
-        const provinceData = await provinceResponse.json()
-        const difficultyData = await difficultyResponse.json()
-        const terrainData = await terrainResponse.json()
-        const approvedData = await approvedResponse.json()
-        const waterData = await waterResponse.json()
-
-        setOptions({
-          province: provinceData,
-          difficulty: difficultyData,
-          typeTerrain:terrainData,
-          approvedFEDME: approvedData,
-          accessWater: waterData         
-        })
+        const optionsData = await getHikingOptions(urlAPI)
+        setOptions(optionsData)
 
       } catch (error) {
         console.log(error)
-        setError('Error al cargar los las opciones del formulario')
+        setError(error.message ||'Error al cargar los las opciones del formulario')
       } finally {
         setLoadingOptions(false)
       }
@@ -96,36 +80,32 @@ const HikingFormPage = () => {
 
     const fetchHikingById = async () => {
       try {
-        const response = await fetch(`${urlAPI}/api/hikings/${id}`)
+        setError(null)
 
-        if(!response.ok) {
-          throw new Error('No se puede cargar la ruta para editar')
-        }
-
-        const data = await response.json()
+        const data = await getHikingById(urlAPI, id)
 
         setFormData({
           name: data.name || '',
           province: data.province || '',
           difficulty: data.difficulty || '',
           distanceKm: data.distanceKm || '',
-          typeTerrain: data.typeTerrain || [],
+          typeTerrain: normalizeArray(data.typeTerrain),
           description: data.description || '',
           image: data.image || '',
           approvedFEDME: data.approvedFEDME || '',
           mapsLink: data.mapsLink || '',
-          accessWater: data.accessWater || []
+          accessWater: normalizeArray(data.accessWater)
         })
 
       } catch (error) {
         console.log(error)
-        setError('Error al cargar la ruta para editar')
+        setError(error.message || 'Error al cargar la ruta para editar')
       } finally {
         setLoadingHiking(false)
       }
     }
     fetchHikingById()
-  }, [id, editMode, urlAPI])
+  }, [editMode, id, urlAPI])
 
   const handleChange = (e) => {
 
@@ -138,26 +118,20 @@ const HikingFormPage = () => {
   }
 
   const handleArrayChange = (e) => {
-
     const { name, value, checked } = e.target
     
-    setFormData((preFormData) => ({
-      ...preFormData,
-      [name]: checked ? [...preFormData[name], value] : preFormData[name].filter((e) => e !== value)
-    }))
+    setFormData((preFormData) => {
+      const currentArray = normalizeArray(preFormData[name])
+
+      return {
+        ...preFormData,
+        [name]: checked
+        ? [...currentArray, value]
+        : currentArray.filter((e) => e !== value)
+      }
+    })
   }
   
-  const isValidUrl = (value) => {
-    if (!value) return true
-    
-    try {
-      const url = new URL(value)
-      return url.protocol === 'http:' || url.protocol === 'https:'
-    } catch {
-      return false
-    }
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
@@ -175,7 +149,7 @@ const HikingFormPage = () => {
       return
     }
 
-    if (!isValidUrl(formData.mapsLink) || !isValidUrl(formData.image)) {
+    if (!validUrl(formData.mapsLink) || !validUrl(formData.image)) {
       setError('La URL no tiene un formato válido')
       return
     }
@@ -183,37 +157,23 @@ const HikingFormPage = () => {
     const payload = {
       name: formData.name,
       province: formData.province,
-      difficulty: formData.difficulty || '',
+      difficulty: formData.difficulty || 'sin definir',
       distanceKm: Number(formData.distanceKm),
       typeTerrain: formData.typeTerrain.length > 0 ? formData.typeTerrain : ['sin definir'],
       description: formData.description,
       image: formData.image,
-      approvedFEDME: formData.approvedFEDME || '',
+      approvedFEDME: formData.approvedFEDME || 'sin homologación',
       mapsLink: formData.mapsLink,
       accessWater: formData.accessWater.length > 0 ? formData.accessWater : ['sin definir']
     }
 
     try {
-      setLoading(true)
+      setSubmit(true)
 
-      const endpoint = editMode
-        ? `${urlAPI}/api/hikings/edit/${id}`
-        : `${urlAPI}/api/hikings`
-
-      const method = editMode ? 'PUT' : 'POST'
-
-      const  response =  await fetch(endpoint, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.message || `Error al ${editMode ? 'editar' : 'crear'} la ruta`)
+      if(editMode) {
+        await updateHiking(urlAPI, id, payload)
+      } else {
+        await createHiking(urlAPI, payload)
       }
 
       alert(editMode ? 'Ruta editada con éxito' : 'Ruta creada con éxito')
@@ -223,7 +183,7 @@ const HikingFormPage = () => {
       console.log(error)
       setError(error.message || `Error al ${editMode ? 'editar' : 'crear'} la ruta`)
     } finally {
-      setLoading(false)
+      setSubmit(false)
     }
   }
   if (loadingOptions || loadingHiking) return <p>Cargango página...</p>
@@ -317,7 +277,7 @@ const HikingFormPage = () => {
         </div>
 
         <fieldset>
-          <legend>Tipos de terreno </legend>
+          <legend>Tipos de terreno</legend>
             {options.typeTerrain.map((terrain) => {
               return (
                 <label key={terrain}>
@@ -378,7 +338,7 @@ const HikingFormPage = () => {
         </div>
 
         <fieldset>
-          <legend>Accesos al agua </legend>
+          <legend>Accesos al agua</legend>
             {options.accessWater.map((water) => {
               return (
                 <label key={water}>
@@ -397,8 +357,8 @@ const HikingFormPage = () => {
 
         {error && <p>{error}</p>}
         
-        <button className='btnPublish' type='submit' disabled={loading}>
-          {loading 
+        <button className='btnPublish' type='submit' disabled={submit}>
+          {submit
           ? (editMode ? 'Guardando...' : 'Publicando...')
           : (editMode ? 'Guardar cambios' : 'Publicar ruta')}
         </button>
@@ -406,5 +366,6 @@ const HikingFormPage = () => {
     </>
   )
 }
+
 
 export default HikingFormPage

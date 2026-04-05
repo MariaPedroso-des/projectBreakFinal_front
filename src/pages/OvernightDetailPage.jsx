@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar.jsx'
 
+import Navbar from '../components/Navbar.jsx'
+import Loader from '../components/Loader.jsx'
+import { getOVernightById, deleteOvernight } from '../services/overnightsService.js'
 
 const OvernightDetailPage = () => {
   const { id } = useParams()
@@ -16,12 +18,9 @@ const OvernightDetailPage = () => {
   useEffect(() => {
     const fetchOvernightById = async () => {
       try {
-        const response = await fetch(`${urlAPI}/api/overnights/${id}`)
+        setError(null)
 
-        if(!response.ok) {
-          throw new Error('No se puede cargar esa zona')
-        }
-        const data = await response.json()
+        const data = await getOVernightById(urlAPI,id)
         setOvernight(data)
       } catch (error) {
         console.log(error)
@@ -39,15 +38,9 @@ const OvernightDetailPage = () => {
     if(!confirmDlt) return
 
     try {
-      const response = await fetch(`${urlAPI}/api/overnights/${id}`, {
-        method: 'DELETE'
-      })
+      setError(null)
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.message || 'No se pudo eliminar la zona de pernocta')
-      }
+      await deleteOvernight(urlAPI, id)
 
       alert('Zona de pernocta eliminada correctamente')
       navigate('/overnights')
@@ -57,7 +50,7 @@ const OvernightDetailPage = () => {
     }
   }
 
-  if (loading) return <p>Cargando zona de pernocta...</p>
+  if (loading) return <Loader />
   if (error) return <p>{error}</p>
   if (!overnight) return <p>No se ha encontrado esta zona de pernocta. Comprueba que sigue estando disponible</p>
   
@@ -78,15 +71,21 @@ const OvernightDetailPage = () => {
       <div>
         <div>
           <p><strong>Provincia: </strong> {overnight.province}</p>
-          <p><strong>Servicios: </strong> {overnight.services?.join(', ')}</p>
+          <p><strong>Servicios: </strong> {Array.isArray(overnight.services) ? overnight.services.join(', ') : overnight.services}</p>
         </div>
 
         <p><strong>Capacidad: </strong> {overnight.capacity}</p>
-        <p><strong>Proximidad: </strong> {overnight.proximity}</p>
-        <p><strong>Ubicación: </strong><a href={overnight.mapsLink} target="_blank"> Ver ubicación</a></p>
+        <p><strong>Proximidad: </strong> {Array.isArray(overnight.proximity) ? overnight.proximity.join(', ') : overnight.proximity}</p>
+        <p><strong>Ubicación:</strong>
+          {overnight.mapsLink ? (
+            <a href={overnight.mapsLink} target="_blank" rel="noreferrer"> Ver</a>
+          ) : (
+            ' No disponible'
+          )}
+        </p>
         <p><strong>Descripción: </strong> {overnight.description}</p>
         <p><strong>Estancia: </strong> {overnight.stay}</p>
-        <p><strong>Limitaciones: </strong> {overnight.limitations?.join(', ')}</p>
+        <p><strong>Limitaciones: </strong> {Array.isArray(overnight.limitations) ? overnight.limitations.join(', ') : overnight.limitations}</p>
       </div>
 
       <section>

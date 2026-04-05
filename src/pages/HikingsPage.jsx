@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+
 import Navbar from '../components/Navbar.jsx'
+import Loader from '../components/Loader.jsx'
 import HikingsFilters from '../components/HikingsFilters.jsx'
 import { getAllHikings } from '../services/hikingsService.js'
 import { getHikingOptions } from '../services/hikingOptionsService.js'
@@ -168,7 +170,8 @@ const HikingsPage = () => {
     )
   })
 
-  if (loading) return <p>Cargando rutas...</p>
+  if (loading) return <Loader />
+
   if (error) return <p>{error}</p>
 
   return (

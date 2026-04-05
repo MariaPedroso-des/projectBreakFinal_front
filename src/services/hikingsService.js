@@ -1,9 +1,9 @@
-const getErrorMessage = async (response, defaulMessage) => {
+const getErrorMessage = async (response, defaultMessage) => {
   try {
-    const data =  await response.json
+    const data = await response.json()
     return data.message ||data.error || defaultMessage
   } catch {
-    return defaulMessage
+    return defaultMessage
   }
 }
 
@@ -41,6 +41,23 @@ export const createHiking = async (urlAPI, payload) => {
 
   if(!response.ok) {
     const message = await getErrorMessage(response, 'Error al intentar crear la ruta')
+    throw new Error(message)
+  }
+
+  return await response.json()
+}
+
+export const updateHiking = async (urlAPI, id, payload) => {
+  const response = await fetch(`${urlAPI}/api/hikings/edit/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload)
+  })
+
+  if(!response.ok) {
+    const message = await getErrorMessage(response, 'Error al intentar editar la ruta')
     throw new Error(message)
   }
 

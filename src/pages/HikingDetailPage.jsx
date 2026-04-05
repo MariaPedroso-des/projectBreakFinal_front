@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar.jsx'
 
+import Navbar from '../components/Navbar.jsx'
+import Loader from '../components/Loader.jsx'
+import { getHikingById, deleteHiking } from '../services/hikingsService.js'
 
 const HikingDetailPage = () => {
   const { id } = useParams()
@@ -16,16 +18,13 @@ const HikingDetailPage = () => {
   useEffect(() => {
     const fetchHikingById = async () => {
       try {
-        const response = await fetch(`${urlAPI}/api/hikings/${id}`)
+        setError(null)
 
-        if(!response.ok) {
-          throw new Error('No se puede cargar esa ruta')
-        }
-        const data = await response.json()
+        const data = await getHikingById(urlAPI, id)
         setHiking(data)
       } catch (error) {
         console.log(error)
-        setError('Error al cargar el detalle de esta ruta')
+        setError(error.message || 'Error al cargar el detalle de esta ruta')
       } finally {
         setLoading(false)
       }
@@ -39,15 +38,9 @@ const HikingDetailPage = () => {
     if(!confirmDlt) return
 
     try {
-      const response = await fetch(`${urlAPI}/api/hikings/${id}`, {
-        method: 'DELETE'
-      })
+      setError(null)
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.message || 'No se pudo eliminar la ruta')
-      }
+      await deleteHiking(urlAPI, id)
 
       alert('Ruta eliminada correctamente')
       navigate('/hikings')
@@ -57,7 +50,7 @@ const HikingDetailPage = () => {
     }
   }
 
-  if (loading) return <p>Cargando ruta...</p>
+  if (loading) return <Loader />
   if (error) return <p>{error}</p>
   if (!hiking) return <p>No se ha encontrado esta ruta. Comprueba que sigue estando disponible</p>
   
@@ -83,10 +76,16 @@ const HikingDetailPage = () => {
 
         <p><strong>Dificultad:</strong> {hiking.difficulty}</p>
         <p><strong>Homologación:</strong> {hiking.approvedFEDME}</p>
-        <p><strong>Ubicación del inicio de la ruta:</strong><a href={hiking.mapsLink} target="_blank"> Ver</a></p>
+        <p><strong>Ubicación del inicio de la ruta:</strong>
+          {hiking.mapsLink ? (
+            <a href={hiking.mapsLink} target="_blank" rel="noreferrer"> Ver</a>
+          ) : (
+            ' No disponible'
+          )}
+        </p>
         <p><strong>Descripción:</strong> {hiking.description}</p>
-        <p><strong>Descripción del terreno:</strong> {hiking.typeTerrain?.join(', ')}</p>
-        <p><strong>Acceso a agua durante la ruta:</strong> {hiking.accessWater?.join(', ')}</p>
+        <p><strong>Descripción del terreno:</strong> {Array.isArray(hiking.typeTerrain) ? hiking.typeTerrain.join(', ') : hiking.typeTerrain}</p>
+        <p><strong>Acceso a agua durante la ruta:</strong> {Array.isArray(hiking.accessWater) ? hiking.accessWater.join(', ') : hiking.accessWater}</p>
       </div>
 
       <section>

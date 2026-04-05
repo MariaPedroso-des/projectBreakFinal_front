@@ -1,20 +1,38 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
+import { getOVernightById,createOvernight, updateOvernight } from '../services/overnightsService.js'
+import { getOvernightOptions } from '../services/overnightOptionsService.js'
 
-  const initialFormData = {
-    name: '',
-    province: '',
-    description: '',
-    capacity: '',
-    image: '',
-    mapsLink: '',
-    services: [],
-    proximity: [],
-    signal: 'sin definir',
-    stay: 'sin definir',
-    limitations: []
+
+const initialFormData = {
+  name: '',
+  province: '',
+  description: '',
+  capacity: '',
+  image: '',
+  mapsLink: '',
+  services: [],
+  proximity: [],
+  signal: 'sin definir',
+  stay: 'sin definir',
+  limitations: []
+}
+
+const normalizeArray = (value) => {
+  return Array.isArray(value) ? value : [] 
+}
+
+const validUrl = (value) => {
+  if(!value) return true
+
+  try {
+    const url = new URL(value)
+    return url.protocol === 'http:' || url.protocol === 'https:'
+  } catch {
+    return false
   }
+}
 
 const OvernightFormPage = () => {
   const navigate = useNavigate()
@@ -34,7 +52,7 @@ const OvernightFormPage = () => {
     limitations: []
   })
 
-  const [loading, setLoading] = useState(false)
+  const [submit, setSubmit] = useState(false)
   const [loadingOptions, setLoadingOptions] = useState(true)
   const [loadingOvernight, setLoadingOvernight] = useState(editMode)
   const [error, setError] = useState(null)
@@ -42,53 +60,14 @@ const OvernightFormPage = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const [
-          provinceResponse,
-          servicesResponse,
-          proximityResponse,
-          signalResponse,
-          stayResponse,
-          limitationsResponse
-        ] = await Promise.all([
-          fetch(`${urlAPI}/api/utils/province`),
-          fetch(`${urlAPI}/api/utils/services`),
-          fetch(`${urlAPI}/api/utils/proximity`),
-          fetch(`${urlAPI}/api/utils/signal`),
-          fetch(`${urlAPI}/api/utils/stay`),
-          fetch(`${urlAPI}/api/utils/limitations`)
-        ])
-        if (
-          !provinceResponse.ok ||
-          !servicesResponse.ok ||
-          !proximityResponse.ok ||
-          !signalResponse.ok ||
-          !stayResponse.ok ||
-          !limitationsResponse.ok
-        ) {
-          setError('Error al cargar datos')
-          return
-        }
+        setError(null)
 
-        const provinceData = await provinceResponse.json()
-        const servicesData = await servicesResponse.json()
-        const proximityData = await proximityResponse.json()
-        const signalData = await signalResponse.json()
-        const stayData = await stayResponse.json()
-        const limitationsData = await limitationsResponse.json()
-
-
-        setOptions({
-          province: provinceData,
-          services: servicesData,
-          proximity: proximityData,
-          signal: signalData,
-          stay: stayData,
-          limitations: limitationsData
-        })
+        const optionsData = await getOvernightOptions(urlAPI)
+        setOptions(optionsData)
 
       } catch (error) {
         console.log(error)
-        setError('Error al cargar los las pociones del formulario')
+        setError(error.message || 'Error al cargar los las pociones del formulario')
       } finally {
         setLoadingOptions(false)
       }
@@ -104,13 +83,9 @@ const OvernightFormPage = () => {
 
     const fetchOvernightById = async ()=> {
       try {
-        const response = await fetch(`${urlAPI}/api/overnights/${id}`)
+        setError(null)
 
-        if (!response.ok) {
-          throw new Error('No se puede cargar la zona de pernocta para editar')
-        }
-
-        const data = await response.json()
+        const data = await getOVernightById(urlAPI, id)
 
         setFormData({
           name: data.name || '',
@@ -119,21 +94,21 @@ const OvernightFormPage = () => {
           capacity: data.capacity || '',
           image: data.image || '',
           mapsLink: data.mapsLink || '',
-          services: data.services || [],
-          proximity: data.proximity || [],
+          services: normalizeArray(data.services),
+          proximity: normalizeArray(data.proximity),
           signal: data.signal || 'sin definir',
           stay: data.stay || 'sin definir',
-          limitations: data.limitations || []
+          limitations: normalizeArray(data.limitations)
         })
       } catch (error) {
         console.log(error)
-        setError('Error al cargar la zona de pernocta para editar')
+        setError(error.message || 'Error al cargar la zona de pernocta para editar')
       } finally {
         setLoadingOvernight(false)
       }
     }
     fetchOvernightById()
-  }, [id, editMode, urlAPI])
+  }, [editMode, id, urlAPI])
 
   const handleChange = (e) => {
 
@@ -146,26 +121,18 @@ const OvernightFormPage = () => {
   }
 
   const handleArrayChange = (e) => {
-
     const { name, value, checked } = e.target
-    console.log('name:', name, 'valor actual:', formData[name])
+    
+    setFormData((preFormData) => {
+      const currentArray = normalizeArray(preFormData[name])
 
-    
-    setFormData((preFormData) => ({
-      ...preFormData,
-      [name]: checked ? [...preFormData[name], value] : preFormData[name].filter((e) => e !== value)
-    }))
-  }
-  
-  const isValidUrl = (value) => {
-    if (!value) return true
-    
-    try {
-      const url = new URL(value)
-      return url.protocol === 'http:' || url.protocol === 'https:'
-    } catch {
-      return false
-    }
+      return {
+        ...preFormData,
+        [name]: checked
+        ? [...currentArray, value]
+        : currentArray.filter((e) => e !== value)
+      }
+    })
   }
 
   const handleSubmit = async (e) => {
@@ -185,7 +152,7 @@ const OvernightFormPage = () => {
       return
     }
     
-    if (!isValidUrl(formData.mapsLink) || !isValidUrl(formData.image)) {
+    if (!validUrl(formData.mapsLink) || !validUrl(formData.image)) {
       setError('La URL no tiene un formato válido')
       return
     }
@@ -205,27 +172,11 @@ const OvernightFormPage = () => {
     }
 
     try {
-      setLoading(true)
+      setSubmit(true)
 
-      const endpoint = editMode
-      ? `${urlAPI}/api/overnights/edit/${id}`
-      : `${urlAPI}/api/overnights`
-
-      const method = editMode ? 'PUT' : 'POST'
-
-      const  response =  await fetch(endpoint, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.message || `Error al ${editMode ? 'editar' : 'crear'} la zona de pernocta`)
-      }
+      if(editMode) {
+        await updateOvernight(urlAPI, id, payload)
+      } else createOvernight(urlAPI, payload)
 
       alert(editMode ? 'Zona de pernocta editada con éxito' : 'Zona de pernocta creada con éxito')
       navigate('/overnights')
@@ -234,7 +185,7 @@ const OvernightFormPage = () => {
       console.log(error)
       setError(error.message ||  `Error al ${editMode ? 'editar' : 'crear'} la zona de pernocta`)
     } finally {
-      setLoading(false)
+      setSubmit(false)
     }
   }
   if (loadingOptions || loadingOvernight) return <p>Cargango página...</p>
@@ -260,7 +211,7 @@ const OvernightFormPage = () => {
         </div>
 
         <div>
-          <label htmlFor="description">Descripción </label>
+          <label htmlFor="description">Descripción</label>
           <textarea 
             id="description"
             name="description"
@@ -272,7 +223,7 @@ const OvernightFormPage = () => {
         </div>
         
         <div>
-          <label htmlFor="province">Provincia </label>
+          <label htmlFor="province">Provincia</label>
           <select
             id="province"
             name="province"
@@ -292,7 +243,7 @@ const OvernightFormPage = () => {
         </div>
 
         <div>
-          <label htmlFor="capacity">Número aproximado de parcamientos </label>
+          <label htmlFor="capacity">Número aproximado de parcamientos</label>
           <input 
             id="capacity"
             name="capacity"
@@ -325,7 +276,7 @@ const OvernightFormPage = () => {
         </fieldset>
 
         <fieldset>
-          <legend>Proximidad </legend>
+          <legend>Proximidad</legend>
             {options.proximity.map((proximity) => {
               return (
                 <label key={proximity}>
@@ -343,7 +294,7 @@ const OvernightFormPage = () => {
         </fieldset>
 
         <div>
-          <label htmlFor="signal">Señal telefónica </label>
+          <label htmlFor="signal">Señal telefónica</label>
           <select
             id="signal"
             name="signal"
@@ -363,7 +314,7 @@ const OvernightFormPage = () => {
         </div>
 
         <div>
-          <label htmlFor="stay">Limitación de estancia </label>
+          <label htmlFor="stay">Limitación de estancia</label>
           <select
             id="stay"
             name="stay"
@@ -383,7 +334,7 @@ const OvernightFormPage = () => {
         </div>
 
         <fieldset>
-          <legend>Limitaciones generales </legend>
+          <legend>Limitaciones generales</legend>
             {options.limitations.map((limitation) => {
               return (
                 <label key={limitation}>
@@ -401,7 +352,7 @@ const OvernightFormPage = () => {
         </fieldset>
 
         <div>
-          <label htmlFor="image">URL de la imagen </label>
+          <label htmlFor="image">URL de la imagen</label>
           <input
             id="image"
             name="image"
@@ -413,7 +364,7 @@ const OvernightFormPage = () => {
         </div>
 
         <div>
-          <label htmlFor="mapsLink">URL de la ubicación </label>
+          <label htmlFor="mapsLink">URL de la ubicación</label>
           <input
             id="mapsLink"
             name="mapsLink"
